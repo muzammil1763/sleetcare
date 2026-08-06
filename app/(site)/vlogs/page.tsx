@@ -69,24 +69,24 @@ export default function VlogsPage() {
     <div className="overflow-x-hidden">
 
       {/* Hero */}
-      <section className="relative overflow-hidden pt-28 pb-14 bg-[#2E2820]">
+      <section className="relative overflow-hidden pt-28 pb-14 bg-[#1e2a5e]">
         <div className="absolute inset-0 grid-bg opacity-20" />
         <div className="container relative">
-          <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#B8897A] mb-4">Behind the Brand</p>
+          <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#2d3a8c] mb-4">Behind the Brand</p>
           <h1
-            className="text-[#F8F5F0] leading-[1.1]"
+            className="text-[#f7f8fc] leading-[1.1]"
             style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "clamp(40px,6vw,64px)", fontWeight: 400 }}
           >
             Our Vlogs
           </h1>
-          <p className="mt-4 text-sm font-light text-[#C4B5A5] max-w-lg leading-relaxed">
+          <p className="mt-4 text-sm font-light text-[#8fa0d8] max-w-lg leading-relaxed">
             Watch our latest videos — from fabric sourcing and embroidery craftsmanship to styling tips and new collection reveals.
           </p>
         </div>
       </section>
 
       {/* Content */}
-      <section className="py-16 bg-[#F8F5F0]">
+      <section className="py-16 bg-[#f7f8fc]">
         <div className="container">
 
           {loading ? (
@@ -107,16 +107,16 @@ export default function VlogsPage() {
             </div>
           ) : vlogs.length === 0 ? (
             <div className="py-24 text-center">
-              <div className="w-16 h-16 border border-[#E8E0D5] flex items-center justify-center mx-auto mb-5">
-                <Play className="w-6 h-6 text-[#C4B5A5]" />
+              <div className="w-16 h-16 border border-[#dde2f0] flex items-center justify-center mx-auto mb-5">
+                <Play className="w-6 h-6 text-[#8fa0d8]" />
               </div>
               <h3
-                className="text-[#2E2820] mb-2"
+                className="text-[#1e2a5e] mb-2"
                 style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "24px" }}
               >
                 No vlogs yet
               </h3>
-              <p className="text-sm font-light text-[#7A6E64]">Check back soon for our latest videos.</p>
+              <p className="text-sm font-light text-[#5a6380]">Check back soon for our latest videos.</p>
             </div>
           ) : (
             <div className="grid lg:grid-cols-3 gap-8">
@@ -126,7 +126,7 @@ export default function VlogsPage() {
                 {activeVlog && (
                   <>
                     {/* Video */}
-                    <div className="aspect-video bg-[#2E2820] overflow-hidden">
+                    <div className="aspect-video bg-[#1e2a5e] overflow-hidden">
                       <iframe
                         key={activeVlog.id}
                         src={toEmbedUrl(activeVlog.videoUrl)}
@@ -138,19 +138,19 @@ export default function VlogsPage() {
                     </div>
 
                     {/* Info */}
-                    <div className="mt-5 pb-6 border-b border-[#E8E0D5]">
-                      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#B8897A] mb-2 flex items-center gap-1.5">
+                    <div className="mt-5 pb-6 border-b border-[#dde2f0]">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#2d3a8c] mb-2 flex items-center gap-1.5">
                         <Calendar className="w-3 h-3" />
                         {formatDate(activeVlog.createdAt)}
                       </p>
                       <h2
-                        className="text-[#2E2820] leading-snug mb-3"
+                        className="text-[#1e2a5e] leading-snug mb-3"
                         style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "clamp(20px,3vw,28px)", fontWeight: 400 }}
                       >
                         {activeVlog.title}
                       </h2>
                       {activeVlog.description && (
-                        <p className="text-sm font-light text-[#7A6E64] leading-relaxed">
+                        <p className="text-sm font-light text-[#5a6380] leading-relaxed">
                           {activeVlog.description}
                         </p>
                       )}
@@ -161,7 +161,7 @@ export default function VlogsPage() {
 
               {/* Playlist sidebar */}
               <div>
-                <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-[#7A6E64] mb-4">
+                <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-[#5a6380] mb-4">
                   All Videos ({vlogs.length})
                 </p>
                 <div className="space-y-1">
@@ -174,8 +174,8 @@ export default function VlogsPage() {
                         onClick={() => setActiveId(v.id)}
                         className={`w-full flex gap-3 p-3 text-left transition-colors ${
                           isActive
-                            ? "bg-[#2E2820]"
-                            : "bg-white border border-[#E8E0D5] hover:border-[#C4B5A5]"
+                            ? "bg-[#1e2a5e]"
+                            : "bg-white border border-[#dde2f0] hover:border-[#8fa0d8]"
                         }`}
                       >
                         {/* Thumbnail */}
@@ -184,11 +184,11 @@ export default function VlogsPage() {
                             <img src={thumb} alt={v.title} className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
-                              <Play className={`w-4 h-4 ${isActive ? "text-[#F8F5F0]" : "text-[#C4B5A5]"}`} />
+                              <Play className={`w-4 h-4 ${isActive ? "text-[#f7f8fc]" : "text-[#8fa0d8]"}`} />
                             </div>
                           )}
                           {/* Play overlay */}
-                          <div className={`absolute inset-0 flex items-center justify-center ${isActive ? "bg-[#B8897A]/40" : "bg-black/0 hover:bg-black/20"} transition-colors`}>
+                          <div className={`absolute inset-0 flex items-center justify-center ${isActive ? "bg-[#2d3a8c]/40" : "bg-black/0 hover:bg-black/20"} transition-colors`}>
                             {isActive && <Play className="w-4 h-4 text-white fill-white" />}
                           </div>
                         </div>
@@ -196,12 +196,12 @@ export default function VlogsPage() {
                         {/* Text */}
                         <div className="flex-1 min-w-0">
                           <p
-                            className={`text-sm leading-snug line-clamp-2 ${isActive ? "text-[#F8F5F0]" : "text-[#2E2820]"}`}
+                            className={`text-sm leading-snug line-clamp-2 ${isActive ? "text-[#f7f8fc]" : "text-[#1e2a5e]"}`}
                             style={{ fontFamily: "var(--font-display), Georgia, serif" }}
                           >
                             {v.title}
                           </p>
-                          <p className={`text-[10px] font-light mt-1 ${isActive ? "text-[#C4B5A5]" : "text-[#7A6E64]"}`}>
+                          <p className={`text-[10px] font-light mt-1 ${isActive ? "text-[#8fa0d8]" : "text-[#5a6380]"}`}>
                             {formatDate(v.createdAt)}
                           </p>
                         </div>
@@ -218,13 +218,13 @@ export default function VlogsPage() {
 
       {/* More vlogs grid — show all below if more than 1 */}
       {vlogs.length > 1 && (
-        <section className="py-16 bg-[#F0EBE3]">
+        <section className="py-16 bg-[#eef0f8]">
           <div className="container">
             <div className="flex items-end justify-between mb-8">
               <div>
-                <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#B8897A] mb-2">Watch More</p>
+                <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#2d3a8c] mb-2">Watch More</p>
                 <h2
-                  className="text-[#2E2820]"
+                  className="text-[#1e2a5e]"
                   style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "28px", fontWeight: 400 }}
                 >
                   All Videos
@@ -255,17 +255,17 @@ export default function VlogsPage() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Play className="w-8 h-8 text-[#C4B5A5]" />
+                          <Play className="w-8 h-8 text-[#8fa0d8]" />
                         </div>
                       )}
                       {/* Overlay */}
-                      <div className="absolute inset-0 bg-[#2E2820]/0 group-hover:bg-[#2E2820]/30 transition-colors flex items-center justify-center">
+                      <div className="absolute inset-0 bg-[#1e2a5e]/0 group-hover:bg-[#1e2a5e]/30 transition-colors flex items-center justify-center">
                         <div className="w-12 h-12 bg-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Play className="w-5 h-5 text-[#2E2820] fill-[#2E2820]" />
+                          <Play className="w-5 h-5 text-[#1e2a5e] fill-[#1e2a5e]" />
                         </div>
                       </div>
                       {isActive && (
-                        <div className="absolute top-3 left-3 bg-[#B8897A] px-2 py-1">
+                        <div className="absolute top-3 left-3 bg-[#2d3a8c] px-2 py-1">
                           <span className="text-[9px] font-medium uppercase tracking-[0.15em] text-white">Now Playing</span>
                         </div>
                       )}
@@ -273,17 +273,17 @@ export default function VlogsPage() {
 
                     {/* Info */}
                     <div className="pt-4">
-                      <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#B8897A] mb-1">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#2d3a8c] mb-1">
                         {formatDate(v.createdAt)}
                       </p>
                       <h3
-                        className="text-[#2E2820] leading-snug group-hover:text-[#B8897A] transition-colors line-clamp-2"
+                        className="text-[#1e2a5e] leading-snug group-hover:text-[#2d3a8c] transition-colors line-clamp-2"
                         style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "17px" }}
                       >
                         {v.title}
                       </h3>
                       {v.description && (
-                        <p className="text-sm font-light text-[#7A6E64] mt-1.5 line-clamp-2">{v.description}</p>
+                        <p className="text-sm font-light text-[#5a6380] mt-1.5 line-clamp-2">{v.description}</p>
                       )}
                     </div>
                   </button>

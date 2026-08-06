@@ -6,19 +6,19 @@ import { X, Send, Bot, Loader2 } from "lucide-react";
 type Message = { role: "user" | "assistant"; text: string };
 
 const SUGGESTIONS = [
-  "What IoT solutions do you offer?",
-  "How does deployment work?",
-  "Tell me about your cloud platform",
-  "What products do you have?",
+  "What products do you recommend for dry skin?",
+  "Are your products fragrance-free?",
+  "How long does shipping take to Pakistan?",
+  "What's in the Glow Serum?",
 ];
 
-const WHATSAPP_FALLBACK = "15550001234";
+const WHATSAPP_FALLBACK = "923008662833";
 
 export default function FloatingButtons() {
   const [chatOpen, setChatOpen] = useState(false);
   const [waNumber, setWaNumber] = useState(WHATSAPP_FALLBACK);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", text: "Hi! 👋 I'm the Majestic Women AI assistant. How can I help you today?" },
+    { role: "assistant", text: "Hi! 👋 I'm the Sleet Care AI assistant. Ask me about our skincare products, ingredients, or your routine!" },
   ]);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
@@ -32,7 +32,7 @@ export default function FloatingButtons() {
       .catch(() => {});
   }, []);
 
-  const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent("Hi! I'm interested in your unstitched suits collection.")}`;
+  const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent("Hi! I'd like to enquire about Sleet Care skincare products.")}`;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -65,7 +65,7 @@ export default function FloatingButtons() {
     } catch {
       setMessages((m) => [...m, {
         role: "assistant",
-        text: "Sorry, I'm having trouble connecting right now. Please try again or contact us at hello@majestic.com",
+        text: "Sorry, I'm having trouble connecting right now. Please try again or contact us at hello@sleetcare.com",
       }]);
     } finally {
       setThinking(false);
@@ -131,10 +131,10 @@ export default function FloatingButtons() {
               <Bot className="w-4 h-4 text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-semibold text-white text-sm">Majestic AI</div>
+              <div className="font-semibold text-white text-sm">Sleet Care AI</div>
               <div className="text-[10px] text-sky-200 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Powered by GPT-4o · Instant replies
+                Skincare assistant · Instant replies
               </div>
             </div>
             <button onClick={() => setChatOpen(false)} className="text-white/70 hover:text-white transition">
@@ -198,7 +198,7 @@ export default function FloatingButtons() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKey}
-              placeholder="Ask anything about Majestic Women..."
+              placeholder="Ask about skincare, ingredients, shipping..."
               disabled={thinking}
               className="flex-1 bg-slate-800 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-sky-400/50 transition disabled:opacity-50"
             />

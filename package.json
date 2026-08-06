@@ -2,6 +2,9 @@
   "name": "SHOPZONE-nextjs",
   "version": "0.0.1",
   "private": true,
+  "prisma": {
+    "seed": "ts-node --project tsconfig.seed.json prisma/seed.ts"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && prisma db push && next build",

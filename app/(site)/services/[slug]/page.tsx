@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useAppStore } from "@/store/AppStore";
 import { serviceIcons } from "@/data/mock";
-import { Check, ArrowLeft, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check, ArrowLeft, Loader2, ArrowRight } from "lucide-react";
 import { useEffect } from "react";
 import InquiryForm from "@/components/site/InquiryForm";
 
@@ -22,116 +20,120 @@ export default function ServiceDetail() {
 
   if (services.length === 0) {
     return (
-      <div className="container pt-40 text-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto" />
+      <div className="min-h-screen bg-[#f7f8fc] flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-[#1e2a5e]" />
       </div>
     );
   }
 
-  if (!service) {
+  if (!service || !service.active) {
     router.push("/services");
     return null;
-  }
-
-  if (!service.active) {
-    return (
-      <div className="container pt-32 pb-20 text-center">
-        <div className="chip mx-auto mb-4">Service Unavailable</div>
-        <h1 className="text-3xl font-bold">This service is currently inactive</h1>
-        <p className="text-muted-foreground mt-3">Contact our team for availability.</p>
-        <Link href="/services">
-          <Button variant="outline" className="mt-6">Back to services</Button>
-        </Link>
-      </div>
-    );
   }
 
   const Icon = serviceIcons[service.icon as keyof typeof serviceIcons] ?? serviceIcons.Server;
 
   return (
-    <div className="container pt-24 pb-12">
-      <Link href="/services" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-8">
-        <ArrowLeft className="w-4 h-4" /> All services
-      </Link>
+    <div className="bg-[#f7f8fc] min-h-screen">
 
-      <div className="grid lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2">
-          {service.image && (
-            <div className="w-full h-64 rounded-xl mb-8 relative overflow-hidden">
-              <img 
-                src={service.image} 
-                alt={service.name} 
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4 flex items-center gap-3">
-                <div className="w-12 h-12 rounded-lg bg-white/90 backdrop-blur flex items-center justify-center">
-                  <Icon className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <span className="chip text-white border-white/30 bg-white/20 backdrop-blur">Active Service</span>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          <div className="flex items-start gap-5">
-            <div className="w-14 h-14 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0">
-              <Icon className="w-7 h-7 text-primary" />
+      {/* Hero */}
+      <section className="py-16 bg-[#1e2a5e]">
+        <div className="container">
+          <Link href="/services" className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.15em] text-[#8fa0d8] hover:text-white transition-colors mb-8">
+            <ArrowLeft className="w-3.5 h-3.5" /> All Services
+          </Link>
+          <div className="flex items-start gap-6">
+            <div className="w-14 h-14 border border-[#8fa0d8]/30 flex items-center justify-center shrink-0">
+              <Icon className="w-6 h-6 text-[#8fa0d8]" />
             </div>
             <div>
-              {!service.image && <span className="chip text-primary border-primary/30 bg-primary/10">Active Service</span>}
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mt-3">{service.name}</h1>
-              <p className="text-lg text-primary/80 font-mono mt-1">{service.tagline}</p>
+              <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#8fa0d8] mb-2">{service.tagline}</p>
+              <h1 className="font-display text-4xl md:text-5xl text-white leading-[1.1]">{service.name}</h1>
             </div>
           </div>
-
-          <p className="mt-8 text-muted-foreground leading-relaxed text-lg">{service.description}</p>
-
-          <section className="mt-12">
-            <h2 className="text-sm font-mono uppercase tracking-wider text-muted-foreground mb-4">Use Cases</h2>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {service.useCases.map((uc) => (
-                <div key={uc} className="glass-card p-4 flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-secondary mt-2" />
-                  <span className="text-sm">{uc}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="mt-10">
-            <h2 className="text-sm font-mono uppercase tracking-wider text-muted-foreground mb-4">Benefits</h2>
-            <ul className="space-y-3">
-              {service.benefits.map((b) => (
-                <li key={b} className="flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-primary/15 flex items-center justify-center mt-0.5">
-                    <Check className="w-3 h-3 text-primary" />
-                  </div>
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
         </div>
+      </section>
 
-        <aside className="lg:col-span-1">
-          <div className="sticky top-28 space-y-4">
-            <InquiryForm type="service" itemName={service.name} itemId={service.id} />
-            <div className="glass-card p-6">
-              <div className="space-y-2 text-xs font-mono text-muted-foreground">
-                <div className="flex justify-between">
-                  <span>SLA</span>
-                  <span className="text-foreground">99%</span>
+      <div className="container py-16">
+        <div className="grid lg:grid-cols-3 gap-10">
+
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-10">
+
+            {/* Image */}
+            {service.image && (
+              <div className="overflow-hidden">
+                <img src={service.image} alt={service.name} className="w-full h-64 object-cover" />
+              </div>
+            )}
+
+            {/* Description */}
+            <div className="bg-white border border-[#dde2f0] p-8">
+              <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-[#2d3a8c] mb-4">About this Service</p>
+              <p className="text-sm font-light text-[#5a6380] leading-relaxed text-base">{service.description}</p>
+            </div>
+
+            {/* Use Cases */}
+            {service.useCases && service.useCases.length > 0 && (
+              <div className="bg-[#eef0f8] border border-[#dde2f0] p-8">
+                <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-[#2d3a8c] mb-6">Use Cases</p>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {service.useCases.map((uc: string) => (
+                    <div key={uc} className="bg-white border border-[#dde2f0] p-4 flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#2d3a8c] mt-2 shrink-0" />
+                      <span className="text-sm font-light text-[#5a6380]">{uc}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex justify-between">
-                  <span>Onboarding</span>
-                  <span className="text-foreground">2–6 weeks</span>
+              </div>
+            )}
+
+            {/* Benefits */}
+            {service.benefits && service.benefits.length > 0 && (
+              <div className="bg-white border border-[#dde2f0] p-8">
+                <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-[#2d3a8c] mb-6">Benefits</p>
+                <ul className="space-y-4">
+                  {service.benefits.map((b: string) => (
+                    <li key={b} className="flex items-start gap-4">
+                      <div className="w-5 h-5 bg-[#1e2a5e] flex items-center justify-center shrink-0 mt-0.5">
+                        <Check className="w-3 h-3 text-white" />
+                      </div>
+                      <span className="text-sm font-light text-[#5a6380] leading-relaxed">{b}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <Link href="/contact">
+              <button className="flex items-center gap-2 bg-[#1e2a5e] text-white text-[11px] font-medium uppercase tracking-[0.2em] px-8 py-4 hover:bg-[#2d3a8c] transition-colors">
+                Enquire About This Service <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </Link>
+          </div>
+
+          {/* Sidebar */}
+          <aside className="space-y-5">
+            <div className="sticky top-28">
+              <InquiryForm type="service" itemName={service.name} itemId={service.id} />
+              <div className="mt-5 bg-white border border-[#dde2f0] p-6">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#2d3a8c] mb-4">Service Details</p>
+                <div className="space-y-3">
+                  {[
+                    { label: "Response Time", value: "Within 1 business day" },
+                    { label: "Delivery",       value: "Nationwide Pakistan"   },
+                    { label: "Support",        value: "WhatsApp & Email"      },
+                  ].map(d => (
+                    <div key={d.label} className="flex justify-between py-2 border-b border-[#dde2f0] last:border-0">
+                      <span className="text-xs font-light text-[#5a6380]">{d.label}</span>
+                      <span className="text-xs font-medium text-[#1e2a5e]">{d.value}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
-        </aside>
+          </aside>
+        </div>
       </div>
     </div>
   );

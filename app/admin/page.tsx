@@ -73,14 +73,14 @@ export default function AdminOverview() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-6 h-6 animate-spin text-[#C4B5A5]" />
+        <Loader2 className="w-6 h-6 animate-spin text-[#8fa0d8]" />
       </div>
     );
   }
 
   if (!analytics) {
     return (
-      <div className="text-center py-20 text-[#7A6E64] text-sm">Failed to load dashboard data.</div>
+      <div className="text-center py-20 text-[#5a6380] text-sm">Failed to load dashboard data.</div>
     );
   }
 

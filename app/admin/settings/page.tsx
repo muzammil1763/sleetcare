@@ -26,9 +26,9 @@ const defaultSettings: Settings = {
 };
 
 const fields: { key: keyof Settings; label: string; icon: any; placeholder: string; hint?: string }[] = [
-  { key: "company_name",     label: "Company Name",     icon: Building2,     placeholder: "Majestic Women" },
+  { key: "company_name",     label: "Company Name",     icon: Building2,     placeholder: "Sleet Care Women" },
   { key: "company_tagline",  label: "Company Tagline",  icon: FileText,      placeholder: "Crafted for the modern woman..." },
-  { key: "contact_email",    label: "Email Address",    icon: Mail,          placeholder: "hello@majestic.com" },
+  { key: "contact_email",    label: "Email Address",    icon: Mail,          placeholder: "hello@sleetcare.com" },
   { key: "contact_phone",    label: "Phone Number",     icon: Phone,         placeholder: "+1 (415) 555-0182" },
   { key: "contact_whatsapp", label: "WhatsApp Number",  icon: MessageCircle, placeholder: "14155550182", hint: "Digits only, with country code. E.g. 14155550182" },
   { key: "contact_address",  label: "Office Address",   icon: MapPin,        placeholder: "Pier 70, San Francisco, CA" },

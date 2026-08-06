@@ -22,18 +22,18 @@ async function buildContext(): Promise<string> {
     ).join("\n\n");
 
     return `
-COMPANY: ${settingsMap.company_name || "Majestic Women"}
-TAGLINE: ${settingsMap.company_tagline || "Premium unstitched suits crafted for the modern Pakistani woman."}
-EMAIL: ${settingsMap.contact_email || "hello@majestic.com"}
+COMPANY: ${settingsMap.company_name || "Sleet Care"}
+TAGLINE: ${settingsMap.company_tagline || "100% natural skincare crafted for the modern customer."}
+EMAIL: ${settingsMap.contact_email || "hello@sleetcare.com"}
 PHONE: ${settingsMap.contact_phone || "+92 300 1234567"}
 WHATSAPP: ${settingsMap.contact_whatsapp || ""}
 ADDRESS: ${settingsMap.contact_address || ""}
 
 ABOUT:
-Majestic Women is a premium unstitched fashion brand offering curated collections of lawn, chiffon, khaddar, silk, linen, and organza suits. We are dedicated to the modern Pakistani woman who values elegance, quality, and individuality.
+Sleet Care is a premium natural skincare fashion brand offering curated collections of lawn, chiffon, khaddar, silk, linen, and organza suits. We are dedicated to the modern customer who values elegance, quality, and individuality.
 
 WHAT WE DO:
-We provide premium unstitched suits across all fabric types and occasions — from casual lawn to bridal silk. Each suit is crafted with care, featuring intricate embroideries, fine fabrics, and timeless designs.
+We provide 100% natural skincare across all fabric types and occasions — from casual lawn to bridal silk. Each suit is crafted with care, featuring intricate embroideries, fine fabrics, and timeless designs.
 
 COLLECTIONS:
 - Lawn: Lightweight summer suits, breathable and vibrant
@@ -64,10 +64,10 @@ PAGES ON WEBSITE:
 HOW TO CONTACT:
 - Contact page: /contact
 - WhatsApp: available via the chat button on the website
-- Email: ${settingsMap.contact_email || "hello@majestic.com"}
+- Email: ${settingsMap.contact_email || "hello@sleetcare.com"}
 `;
   } catch {
-    return `Majestic Women is a premium unstitched fashion brand offering lawn, chiffon, khaddar, silk, linen, and organza suits. Contact us at hello@majestic.com.`;
+    return `Sleet Care is a premium natural skincare fashion brand offering lawn, chiffon, khaddar, silk, linen, and organza suits. Contact us at hello@sleetcare.com.`;
   }
 }
 
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
 
     const context = await buildContext();
 
-    const systemPrompt = `You are the Majestic Women AI assistant — a helpful, knowledgeable, and friendly chatbot for the Majestic Women website. Majestic Women is a premium unstitched fashion brand.
+    const systemPrompt = `You are the Sleet Care AI assistant — a helpful, knowledgeable, and friendly chatbot for the Sleet Care website. Sleet Care is a premium natural skincare fashion brand.
 
 Use the following company information to answer questions accurately:
 
@@ -91,7 +91,7 @@ ${context}
 INSTRUCTIONS:
 - Be concise, helpful, and professional
 - Answer questions about our suits, collections, fabrics, pricing, delivery, and returns
-- For sizing questions, mention that suits are unstitched and can be tailored to any size
+- For sizing questions, mention that suits are natural skincare and can be tailored to any size
 - For pricing inquiries, direct users to the products page or contact form
 - If asked something outside our scope, politely redirect to relevant collections
 - Always encourage users to contact the team for specific requirements
@@ -108,8 +108,8 @@ INSTRUCTIONS:
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${apiKey}`,
-        "HTTP-Referer": "https://majestic.com",
-        "X-Title": "Majestic Women AI Assistant",
+        "HTTP-Referer": "https://sleetcare.com",
+        "X-Title": "Sleet Care AI Assistant",
       },
       body: JSON.stringify({
         model,

@@ -176,27 +176,27 @@ export default function AdminVlogs() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
-          <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#B8897A] mb-2">Content</p>
+          <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#2d3a8c] mb-2">Content</p>
           <h1
-            className="text-[#2E2820] leading-tight"
+            className="text-[#1e2a5e] leading-tight"
             style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "28px", fontWeight: 400 }}
           >
             Vlogs
           </h1>
-          <p className="text-sm font-light text-[#7A6E64] mt-1">{vlogs.length} videos in library</p>
+          <p className="text-sm font-light text-[#5a6380] mt-1">{vlogs.length} videos in library</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={load}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2.5 border border-[#E8E0D5] bg-white text-[11px] font-medium uppercase tracking-[0.12em] text-[#7A6E64] hover:border-[#2E2820] hover:text-[#2E2820] transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 border border-[#dde2f0] bg-white text-[11px] font-medium uppercase tracking-[0.12em] text-[#5a6380] hover:border-[#1e2a5e] hover:text-[#1e2a5e] transition-colors"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
             Refresh
           </button>
           <button
             onClick={openCreate}
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#2E2820] text-[#F8F5F0] text-[11px] font-medium uppercase tracking-[0.12em] hover:bg-[#4A4038] transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#1e2a5e] text-[#f7f8fc] text-[11px] font-medium uppercase tracking-[0.12em] hover:bg-[#2d3a8c] transition-colors"
           >
             <Plus className="w-3.5 h-3.5" /> Add Vlog
           </button>
@@ -204,13 +204,13 @@ export default function AdminVlogs() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-[#E8E0D5] overflow-hidden">
+      <div className="bg-white border border-[#dde2f0] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm min-w-max">
-            <thead className="border-b border-[#E8E0D5] bg-[#F8F5F0]">
+            <thead className="border-b border-[#dde2f0] bg-[#f7f8fc]">
               <tr className="text-left">
                 {["Thumbnail", "Title & Description", "Video URL", "Order", "Status", "Actions"].map((h) => (
-                  <th key={h} className="px-5 py-3 text-[9px] font-medium uppercase tracking-[0.2em] text-[#7A6E64]">
+                  <th key={h} className="px-5 py-3 text-[9px] font-medium uppercase tracking-[0.2em] text-[#5a6380]">
                     {h}
                   </th>
                 ))}
@@ -220,37 +220,37 @@ export default function AdminVlogs() {
               {loading ? (
                 <tr>
                   <td colSpan={6} className="px-5 py-16 text-center">
-                    <Loader2 className="w-5 h-5 animate-spin text-[#C4B5A5] mx-auto" />
+                    <Loader2 className="w-5 h-5 animate-spin text-[#8fa0d8] mx-auto" />
                   </td>
                 </tr>
               ) : vlogs.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-5 py-16 text-center">
-                    <Play className="w-10 h-10 text-[#E8E0D5] mx-auto mb-3" />
-                    <p className="text-sm font-light text-[#C4B5A5]">No vlogs yet. Add your first video.</p>
+                    <Play className="w-10 h-10 text-[#dde2f0] mx-auto mb-3" />
+                    <p className="text-sm font-light text-[#8fa0d8]">No vlogs yet. Add your first video.</p>
                   </td>
                 </tr>
               ) : (
                 vlogs.map((v) => {
                   const thumb = v.thumbnail || getYoutubeThumbnail(v.videoUrl);
                   return (
-                    <tr key={v.id} className="border-b border-[#E8E0D5] last:border-0 hover:bg-[#F8F5F0] transition-colors">
+                    <tr key={v.id} className="border-b border-[#dde2f0] last:border-0 hover:bg-[#f7f8fc] transition-colors">
                       {/* Thumbnail */}
                       <td className="px-5 py-3">
-                        <div className="w-24 h-14 bg-[#E8DDD0] overflow-hidden shrink-0">
+                        <div className="w-24 h-14 bg-[#dde8f8] overflow-hidden shrink-0">
                           {thumb ? (
                             <img src={thumb} alt={v.title} className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
-                              <Play className="w-5 h-5 text-[#C4B5A5]" />
+                              <Play className="w-5 h-5 text-[#8fa0d8]" />
                             </div>
                           )}
                         </div>
                       </td>
                       {/* Title */}
                       <td className="px-5 py-3 max-w-[260px]">
-                        <p className="font-medium text-[#2E2820] text-sm truncate">{v.title}</p>
-                        <p className="text-[11px] font-light text-[#7A6E64] line-clamp-2 mt-0.5">{v.description}</p>
+                        <p className="font-medium text-[#1e2a5e] text-sm truncate">{v.title}</p>
+                        <p className="text-[11px] font-light text-[#5a6380] line-clamp-2 mt-0.5">{v.description}</p>
                       </td>
                       {/* URL */}
                       <td className="px-5 py-3">
@@ -258,20 +258,20 @@ export default function AdminVlogs() {
                           href={v.videoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 text-[11px] font-light text-[#B8897A] hover:text-[#2E2820] transition-colors max-w-[180px] truncate"
+                          className="flex items-center gap-1.5 text-[11px] font-light text-[#2d3a8c] hover:text-[#1e2a5e] transition-colors max-w-[180px] truncate"
                         >
                           <ExternalLink className="w-3 h-3 shrink-0" />
                           <span className="truncate">{v.videoUrl}</span>
                         </a>
                       </td>
                       {/* Order */}
-                      <td className="px-5 py-3 text-sm font-light text-[#7A6E64]">{v.order}</td>
+                      <td className="px-5 py-3 text-sm font-light text-[#5a6380]">{v.order}</td>
                       {/* Status */}
                       <td className="px-5 py-3">
                         <Switch
                           checked={v.active}
                           onCheckedChange={() => toggleActive(v)}
-                          className="data-[state=checked]:bg-[#2E2820]"
+                          className="data-[state=checked]:bg-[#1e2a5e]"
                         />
                       </td>
                       {/* Actions */}
@@ -279,13 +279,13 @@ export default function AdminVlogs() {
                         <div className="flex gap-1">
                           <button
                             onClick={() => openEdit(v)}
-                            className="p-2 hover:bg-[#F0EBE3] transition-colors text-[#7A6E64] hover:text-[#2E2820]"
+                            className="p-2 hover:bg-[#eef0f8] transition-colors text-[#5a6380] hover:text-[#1e2a5e]"
                           >
                             <Pencil className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => onDelete(v.id)}
-                            className="p-2 hover:bg-red-50 transition-colors text-[#7A6E64] hover:text-red-600"
+                            className="p-2 hover:bg-red-50 transition-colors text-[#5a6380] hover:text-red-600"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -302,10 +302,10 @@ export default function AdminVlogs() {
 
       {/* Add / Edit Dialog */}
       <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null); }}>
-        <DialogContent className="bg-white border-[#E8E0D5] max-w-2xl max-h-[90vh] overflow-y-auto rounded-none">
+        <DialogContent className="bg-white border-[#dde2f0] max-w-2xl max-h-[90vh] overflow-y-auto rounded-none">
           <DialogHeader>
             <DialogTitle
-              className="text-[#2E2820]"
+              className="text-[#1e2a5e]"
               style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "22px", fontWeight: 400 }}
             >
               {editing ? "Edit Vlog" : "Add New Vlog"}
@@ -315,20 +315,20 @@ export default function AdminVlogs() {
           <div className="space-y-5 py-2">
             {/* Title */}
             <div>
-              <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#7A6E64] mb-2 block">
+              <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] mb-2 block">
                 Title *
               </Label>
               <Input
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
                 placeholder="e.g. Summer Lawn Collection 2025"
-                className="border-[#E8E0D5] rounded-none focus:border-[#2E2820] text-sm"
+                className="border-[#dde2f0] rounded-none focus:border-[#1e2a5e] text-sm"
               />
             </div>
 
             {/* Description */}
             <div>
-              <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#7A6E64] mb-2 block">
+              <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] mb-2 block">
                 Description
               </Label>
               <textarea
@@ -336,22 +336,22 @@ export default function AdminVlogs() {
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 rows={3}
                 placeholder="Brief description of the vlog..."
-                className="w-full border border-[#E8E0D5] px-3 py-2 text-sm font-light text-[#2E2820] focus:outline-none focus:border-[#2E2820] resize-none placeholder:text-[#C4B5A5]"
+                className="w-full border border-[#dde2f0] px-3 py-2 text-sm font-light text-[#1e2a5e] focus:outline-none focus:border-[#1e2a5e] resize-none placeholder:text-[#8fa0d8]"
               />
             </div>
 
             {/* Video URL */}
             <div>
-              <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#7A6E64] mb-2 block">
-                Video URL * <span className="normal-case tracking-normal font-light text-[#C4B5A5]">(YouTube, Vimeo, or direct .mp4)</span>
+              <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] mb-2 block">
+                Video URL * <span className="normal-case tracking-normal font-light text-[#8fa0d8]">(YouTube, Vimeo, or direct .mp4)</span>
               </Label>
               <Input
                 value={form.videoUrl}
                 onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
                 placeholder="https://www.youtube.com/watch?v=..."
-                className="border-[#E8E0D5] rounded-none focus:border-[#2E2820] text-sm font-light"
+                className="border-[#dde2f0] rounded-none focus:border-[#1e2a5e] text-sm font-light"
               />
-              <p className="text-[10px] font-light text-[#C4B5A5] mt-1">
+              <p className="text-[10px] font-light text-[#8fa0d8] mt-1">
                 Supports: youtube.com/watch, youtu.be, youtube.com/shorts, or any direct video URL
               </p>
             </div>
@@ -359,10 +359,10 @@ export default function AdminVlogs() {
             {/* Live Preview */}
             {previewUrl && (
               <div>
-                <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#7A6E64] mb-2 block">
+                <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] mb-2 block">
                   Preview
                 </Label>
-                <div className="aspect-video bg-[#E8DDD0] overflow-hidden">
+                <div className="aspect-video bg-[#dde8f8] overflow-hidden">
                   <iframe
                     src={previewUrl}
                     className="w-full h-full"
@@ -376,21 +376,21 @@ export default function AdminVlogs() {
 
             {/* Thumbnail URL (optional) */}
             <div>
-              <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#7A6E64] mb-2 block">
-                Custom Thumbnail URL <span className="normal-case tracking-normal font-light text-[#C4B5A5]">(optional — auto-detected for YouTube)</span>
+              <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] mb-2 block">
+                Custom Thumbnail URL <span className="normal-case tracking-normal font-light text-[#8fa0d8]">(optional — auto-detected for YouTube)</span>
               </Label>
               <Input
                 value={form.thumbnail}
                 onChange={(e) => setForm({ ...form, thumbnail: e.target.value })}
                 placeholder="https://..."
-                className="border-[#E8E0D5] rounded-none focus:border-[#2E2820] text-sm font-light"
+                className="border-[#dde2f0] rounded-none focus:border-[#1e2a5e] text-sm font-light"
               />
             </div>
 
             {/* Order + Active */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#7A6E64] mb-2 block">
+                <Label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] mb-2 block">
                   Display Order
                 </Label>
                 <Input
@@ -398,7 +398,7 @@ export default function AdminVlogs() {
                   value={form.order}
                   onChange={(e) => setForm({ ...form, order: +e.target.value })}
                   min={0}
-                  className="border-[#E8E0D5] rounded-none focus:border-[#2E2820] text-sm"
+                  className="border-[#dde2f0] rounded-none focus:border-[#1e2a5e] text-sm"
                 />
               </div>
               <div className="flex items-end gap-3 pb-1">
@@ -406,9 +406,9 @@ export default function AdminVlogs() {
                   id="vlog-active"
                   checked={form.active}
                   onCheckedChange={(c) => setForm({ ...form, active: c })}
-                  className="data-[state=checked]:bg-[#2E2820]"
+                  className="data-[state=checked]:bg-[#1e2a5e]"
                 />
-                <Label htmlFor="vlog-active" className="text-sm font-light text-[#7A6E64] cursor-pointer">
+                <Label htmlFor="vlog-active" className="text-sm font-light text-[#5a6380] cursor-pointer">
                   Visible on site
                 </Label>
               </div>
@@ -418,14 +418,14 @@ export default function AdminVlogs() {
           <DialogFooter className="gap-2">
             <button
               onClick={() => setOpen(false)}
-              className="px-5 py-2.5 border border-[#E8E0D5] text-[11px] font-medium uppercase tracking-[0.12em] text-[#7A6E64] hover:border-[#2E2820] hover:text-[#2E2820] transition-colors"
+              className="px-5 py-2.5 border border-[#dde2f0] text-[11px] font-medium uppercase tracking-[0.12em] text-[#5a6380] hover:border-[#1e2a5e] hover:text-[#1e2a5e] transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={onSave}
               disabled={saving}
-              className="px-5 py-2.5 bg-[#2E2820] text-[#F8F5F0] text-[11px] font-medium uppercase tracking-[0.12em] hover:bg-[#4A4038] disabled:opacity-50 transition-colors flex items-center gap-2"
+              className="px-5 py-2.5 bg-[#1e2a5e] text-[#f7f8fc] text-[11px] font-medium uppercase tracking-[0.12em] hover:bg-[#2d3a8c] disabled:opacity-50 transition-colors flex items-center gap-2"
             >
               {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               {saving ? "Saving…" : editing ? "Update" : "Add Vlog"}

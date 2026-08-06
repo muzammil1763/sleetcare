@@ -44,7 +44,7 @@ export default function Footer() {
   }, []);
 
   const waUrl = settings.contact_whatsapp
-    ? `https://wa.me/${settings.contact_whatsapp}?text=${encodeURIComponent("Hi! I'm interested in your leather jacket collection.")}`
+    ? `https://wa.me/${settings.contact_whatsapp}?text=${encodeURIComponent("Hi! I'd like to enquire about Sleet Care products.")}`
     : "#";
 
   return (

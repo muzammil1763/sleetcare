@@ -51,9 +51,9 @@ export default function InquiryForm({ type, itemName, itemId, qty }: InquiryForm
           const sep = "━━━━━━━━━━━━━━━━━━━━";
           let msg = "";
           if (type === "service") {
-            msg = `🔧 *Service Inquiry - Majestic Women*\n${sep}\n*Service:* ${itemName}\n*Name:* ${form.name}\n*Email:* ${form.email}\n*Phone:* ${form.phone}\n*Company:* ${form.company || "N/A"}\n*Message:* ${form.message}\n${sep}\nSent from majestic.com`;
+            msg = `🔧 *Service Inquiry - Sleet Care*\n${sep}\n*Service:* ${itemName}\n*Name:* ${form.name}\n*Email:* ${form.email}\n*Phone:* ${form.phone}\n*Company:* ${form.company || "N/A"}\n*Message:* ${form.message}\n${sep}\nSent from sleetcare.com`;
           } else {
-            msg = `📦 *Product Inquiry - Majestic Women*\n${sep}\n*Product:* ${itemName}${qty ? `\n*Quantity:* ${qty}` : ""}\n*Name:* ${form.name}\n*Email:* ${form.email}\n*Phone:* ${form.phone}\n*Company:* ${form.company || "N/A"}\n*Message:* ${form.message}\n${sep}\nSent from majestic.com`;
+            msg = `📦 *Product Inquiry - Sleet Care*\n${sep}\n*Product:* ${itemName}${qty ? `\n*Quantity:* ${qty}` : ""}\n*Name:* ${form.name}\n*Email:* ${form.email}\n*Phone:* ${form.phone}\n*Company:* ${form.company || "N/A"}\n*Message:* ${form.message}\n${sep}\nSent from sleetcare.com`;
           }
           const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
           window.open(waUrl, "_blank");
