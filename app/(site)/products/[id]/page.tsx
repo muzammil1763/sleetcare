@@ -28,6 +28,7 @@ export default function ProductDetail() {
   const { products, loadProducts, addToCart } = useAppStore();
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [selectedGalleryVideo, setSelectedGalleryVideo] = useState<number | null>(null);
   const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => { loadProducts(); }, [loadProducts]);
@@ -48,7 +49,13 @@ export default function ProductDetail() {
   }
 
   const Icon = productIcons[product.icon as keyof typeof productIcons] ?? Package;
-  const galleryImages = (product.images || []).filter(Boolean);
+  // Separate gallery into images and videos
+  const allGalleryItems = (product.images || []).filter(Boolean);
+  const galleryImages = allGalleryItems.filter(item => !item.startsWith("video:"));
+  const galleryVideos = allGalleryItems
+    .filter(item => item.startsWith("video:"))
+    .map(item => item.replace("video:", ""));
+
   const currentImage = selectedImage !== null && galleryImages[selectedImage]
     ? galleryImages[selectedImage]
     : product.image;
@@ -74,13 +81,12 @@ export default function ProductDetail() {
             {/* Main image / video toggle */}
             <div className="relative aspect-[3/4] overflow-hidden bg-[#dde8f8]">
               {showVideo && embedUrl ? (
-                <iframe
-                  src={embedUrl}
-                  className="w-full h-full"
+                <iframe src={embedUrl} className="w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title={product.name}
-                />
+                  allowFullScreen title={product.name} />
+              ) : showVideo && !embedUrl && selectedGalleryVideo !== null ? (
+                <video src={galleryVideos[selectedGalleryVideo]} controls autoPlay
+                  className="w-full h-full object-contain bg-black" />
               ) : currentImage ? (
                 <img src={currentImage} alt={product.name} className="w-full h-full object-cover" />
               ) : (
@@ -96,12 +102,10 @@ export default function ProductDetail() {
                 </div>
               )}
 
-              {/* Video play button overlay */}
+              {/* YouTube video play button overlay */}
               {!showVideo && embedUrl && (
-                <button
-                  onClick={() => setShowVideo(true)}
-                  className="absolute bottom-4 right-4 flex items-center gap-2 bg-[#1e2a5e]/90 backdrop-blur-sm text-white px-4 py-2.5 hover:bg-[#1e2a5e] transition-colors group"
-                >
+                <button onClick={() => { setShowVideo(true); setSelectedGalleryVideo(null); }}
+                  className="absolute bottom-4 right-4 flex items-center gap-2 bg-[#1e2a5e]/90 backdrop-blur-sm text-white px-4 py-2.5 hover:bg-[#1e2a5e] transition-colors">
                   <div className="w-6 h-6 bg-[#2d3a8c] flex items-center justify-center shrink-0">
                     <Play className="w-3 h-3 fill-white text-white" />
                   </div>
@@ -112,42 +116,55 @@ export default function ProductDetail() {
 
             {/* Thumbnails row */}
             <div className="grid grid-cols-5 gap-2 mt-3">
+              {/* Main image */}
               {product.image && (
-                <div
-                  onClick={() => { setSelectedImage(null); setShowVideo(false); }}
+                <div onClick={() => { setSelectedImage(null); setShowVideo(false); setSelectedGalleryVideo(null); }}
                   className={`aspect-square overflow-hidden bg-[#dde8f8] cursor-pointer transition-all ${
                     selectedImage === null && !showVideo ? "ring-2 ring-[#1e2a5e]" : "opacity-60 hover:opacity-100"
-                  }`}
-                >
+                  }`}>
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                 </div>
               )}
-              {/* Local image thumbnails when no product images */}
+              {/* Fallback thumbnails when no product image */}
               {!product.image && ["/img1.png", "/img2.png", "/img3.png"].map((src, i) => (
-                <div
-                  key={i}
-                  onClick={() => { setSelectedImage(i); setShowVideo(false); }}
+                <div key={i} onClick={() => { setSelectedImage(i); setShowVideo(false); setSelectedGalleryVideo(null); }}
                   className={`aspect-square overflow-hidden bg-[#dde8f8] cursor-pointer transition-all ${
                     selectedImage === i && !showVideo ? "ring-2 ring-[#1e2a5e]" : "opacity-60 hover:opacity-100"
-                  }`}
-                >
+                  }`}>
                   <img src={src} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
                 </div>
               ))}
+              {/* Gallery image thumbnails */}
               {galleryImages.slice(0, 3).map((img, i) => (
-                <div
-                  key={i}
-                  onClick={() => { setSelectedImage(i); setShowVideo(false); }}
+                <div key={i} onClick={() => { setSelectedImage(i); setShowVideo(false); setSelectedGalleryVideo(null); }}
                   className={`aspect-square overflow-hidden bg-[#dde8f8] cursor-pointer transition-all ${
                     selectedImage === i && !showVideo ? "ring-2 ring-[#1e2a5e]" : "opacity-60 hover:opacity-100"
-                  }`}
-                >
+                  }`}>
                   <img src={img} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
                 </div>
               ))}
+              {/* Gallery video thumbnails */}
+              {galleryVideos.map((vid, i) => (
+                <div key={`gvid-${i}`}
+                  onClick={() => { setShowVideo(true); setSelectedGalleryVideo(i); setSelectedImage(null); }}
+                  className={`aspect-square bg-[#1e2a5e] cursor-pointer flex flex-col items-center justify-center gap-1 transition-all ${
+                    showVideo && selectedGalleryVideo === i ? "ring-2 ring-[#8fa0d8]" : "opacity-70 hover:opacity-100"
+                  }`}>
+                  <Play className="w-5 h-5 text-white fill-white" />
+                  <span className="text-[8px] font-medium uppercase tracking-[0.15em] text-[#c8d0f0]">Video {i + 1}</span>
+                </div>
+              ))}
+              {/* YouTube video thumbnail */}
               {embedUrl && (
-                <div
-                  onClick={() => setShowVideo(true)}
+                <div onClick={() => { setShowVideo(true); setSelectedGalleryVideo(null); }}
+                  className={`aspect-square bg-[#1e2a5e] cursor-pointer flex flex-col items-center justify-center gap-1 transition-all ${
+                    showVideo && selectedGalleryVideo === null ? "ring-2 ring-[#8fa0d8]" : "opacity-70 hover:opacity-100"
+                  }`}>
+                  <Play className="w-5 h-5 text-white fill-white" />
+                  <span className="text-[8px] font-medium uppercase tracking-[0.15em] text-[#c8d0f0]">Video</span>
+                </div>
+              )}
+            </div>
                   className={`aspect-square bg-[#1e2a5e] cursor-pointer flex flex-col items-center justify-center gap-1 transition-all ${
                     showVideo ? "ring-2 ring-[#8fa0d8]" : "opacity-70 hover:opacity-100"
                   }`}

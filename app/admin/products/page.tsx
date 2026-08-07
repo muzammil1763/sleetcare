@@ -85,7 +85,18 @@ export default function AdminProducts() {
   };
 
   const onSave = async () => {
-    if (!form.name) return;
+    if (!form.name) {
+      toast({ title: "Name required", description: "Please enter a product name.", variant: "destructive" });
+      return;
+    }
+    if (!form.category) {
+      toast({ title: "Category required", description: "Please select at least one category before saving.", variant: "destructive" });
+      return;
+    }
+    if (categories.length === 0) {
+      toast({ title: "No categories found", description: "Please create a category first from the Categories section.", variant: "destructive" });
+      return;
+    }
     setSaving(true);
     try {
       if (editing) {
@@ -199,6 +210,18 @@ export default function AdminProducts() {
         <DialogContent className="bg-card border-border max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
           <DialogHeader><DialogTitle>{editing ? "Edit product" : "Add product"}</DialogTitle></DialogHeader>
           <div className="space-y-4 pr-4">
+            {categories.length === 0 && (
+              <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-md">
+                <span className="text-amber-500 text-lg shrink-0">⚠</span>
+                <div>
+                  <p className="text-sm font-medium text-amber-700">No categories available</p>
+                  <p className="text-xs text-amber-600 mt-0.5">
+                    You must create at least one category before adding products.{" "}
+                    <a href="/admin/categories" className="underline font-medium">Go to Categories →</a>
+                  </p>
+                </div>
+              </div>
+            )}
             <ImageUpload value={form.image} onChange={(url) => setForm({ ...form, image: url })} folder="sleetcare/products" label="Main Product Image" />
             
             {/* Multiple Images + Video Upload */}
@@ -438,7 +461,9 @@ export default function AdminProducts() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button variant="hero" onClick={onSave} disabled={saving}>{saving ? "Saving..." : "Save"}</Button>
+            <Button variant="hero" onClick={onSave} disabled={saving || categories.length === 0}>
+              {saving ? "Saving..." : categories.length === 0 ? "Add a category first" : "Save"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
