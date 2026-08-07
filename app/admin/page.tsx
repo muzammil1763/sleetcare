@@ -54,14 +54,20 @@ export default function AdminOverview() {
 
   const fetchData = () =>
     Promise.all([
-      fetch("/api/analytics", { cache: "no-store" }).then((r) => r.json()),
-      fetch("/api/orders", { cache: "no-store" }).then((r) => r.json()),
+      fetch("/api/analytics", { cache: "no-store" }).then((r) => {
+        if (!r.ok) throw new Error(`Analytics failed: ${r.status}`);
+        return r.json();
+      }),
+      fetch("/api/orders", { cache: "no-store" }).then((r) => {
+        if (!r.ok) throw new Error(`Orders failed: ${r.status}`);
+        return r.json();
+      }),
     ])
       .then(([a, o]) => {
         setAnalytics(a);
         setRecentOrders(Array.isArray(o) ? o.slice(0, 6) : []);
       })
-      .catch(console.error)
+      .catch((err) => console.error("Dashboard fetch error:", err))
       .finally(() => setLoading(false));
 
   useEffect(() => {

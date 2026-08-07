@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const [totalOrders, totalProducts, totalUsers, services, engineeringServices, orders] = await Promise.all([
@@ -76,6 +78,7 @@ export async function GET() {
       categoryData: categoryData.map((c) => ({ name: c.category, value: c._count.id })),
     }, { headers: { "Cache-Control": "no-store" } });
   } catch (e) {
+    console.error("Analytics API error:", e);
     return NextResponse.json({ error: "Failed to fetch analytics" }, { status: 500 });
   }
 }

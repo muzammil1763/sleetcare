@@ -119,6 +119,7 @@ export default function Checkout() {
           shippingAddress: form,
           paymentMethod,
           paymentScreenshot: screenshot || null,
+          deliveryCharges,
         }),
       });
       const data = await res.json();

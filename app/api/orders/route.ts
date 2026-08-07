@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
+export const dynamic = "force-dynamic";
+
 const orderSchema = z.object({
   customer: z.string().min(1),
   email: z.string().email(),
   phone: z.string().optional(),
   paymentMethod: z.string().optional(),
   paymentScreenshot: z.string().optional(),
+  deliveryCharges: z.number().optional(),
   items: z.array(z.object({ productId: z.string(), qty: z.number().int().positive() })),
   shippingAddress: z.object({
     phone: z.string().optional(),
@@ -33,7 +36,8 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json(orders);
-  } catch {
+  } catch (e) {
+    console.error("Orders GET error:", e);
     return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });
   }
 }
@@ -41,17 +45,20 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { customer, email, phone, items, shippingAddress, paymentMethod, paymentScreenshot } = orderSchema.parse(body);
+    const { customer, email, phone, items, shippingAddress, paymentMethod, paymentScreenshot, deliveryCharges } = orderSchema.parse(body);
 
     // Fetch product prices
     const products = await prisma.product.findMany({
       where: { id: { in: items.map((i) => i.productId) } },
     });
 
-    const total = items.reduce((sum, item) => {
+    const subtotal = items.reduce((sum, item) => {
       const product = products.find((p) => p.id === item.productId);
       return sum + (product?.price ?? 0) * item.qty;
     }, 0);
+
+    const shipping = deliveryCharges ?? 0;
+    const total = subtotal + shipping;
 
     const itemCount = items.reduce((n, i) => n + i.qty, 0);
 
@@ -70,7 +77,7 @@ export async function POST(req: NextRequest) {
         items: itemCount,
         date: new Date().toISOString(),
         status: "Pending",
-        shippingAddress: shippingAddress || null,
+        shippingAddress: shippingAddress ? { ...shippingAddress, deliveryCharges: shipping } : { deliveryCharges: shipping },
         paymentMethod: paymentMethod || "cod",
         paymentScreenshot: paymentScreenshot || null,
         userId: user?.id,

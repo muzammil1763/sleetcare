@@ -37,6 +37,7 @@ type Order = {
     city?: string;
     zip?: string;
     country?: string;
+    deliveryCharges?: number;
   };
 };
 
@@ -218,10 +219,10 @@ export default function AdminOrders() {
       </div>
 
       <Dialog open={!!view} onOpenChange={(v) => !v && setView(null)}>
-        <DialogContent className="bg-card border-border max-w-2xl">
+        <DialogContent className="bg-card border-border max-w-2xl max-h-[90vh] flex flex-col">
           <DialogHeader><DialogTitle className="font-mono">Order #{view?.id.slice(-8).toUpperCase()}</DialogTitle></DialogHeader>
           {view && (
-            <div className="space-y-4 text-sm">
+            <div className="overflow-y-auto flex-1 pr-1 space-y-4 text-sm">
               <div className="grid grid-cols-2 gap-4">
                 <div className="border-b border-border pb-2">
                   <span className="text-muted-foreground text-xs">Customer</span>
@@ -317,17 +318,44 @@ export default function AdminOrders() {
                 </div>
               )}
 
-              <div className="border-t border-border pt-4 flex justify-between items-center">
-                <div>
-                  <span className="text-muted-foreground text-xs">Status</span>
-                  <Select value={view.status} onValueChange={(v) => onStatusChange(view.id, v as OrderStatus)}>
-                    <SelectTrigger className={`h-7 text-xs w-36 border rounded-md px-2 mt-1 ${statusColor[view.status]}`}><SelectValue /></SelectTrigger>
-                    <SelectContent>{ALL_STATUSES.map((s) => <SelectItem key={s} value={s} className="text-xs">{s}</SelectItem>)}</SelectContent>
-                  </Select>
-                </div>
-                <div className="text-right">
-                  <span className="text-muted-foreground text-xs">Total Amount</span>
-                  <div className="font-mono text-2xl font-semibold text-primary">Rs. {calculateTotal(view).toLocaleString("en-PK")}</div>
+              <div className="border-t border-border pt-4 space-y-3">
+                {/* Price breakdown */}
+                {(() => {
+                  const deliveryCharges = view.shippingAddress?.deliveryCharges;
+                  const subtotal = view.orderItems
+                    ? view.orderItems.reduce((s, i) => s + i.price * i.qty, 0)
+                    : view.total - (deliveryCharges ?? 0);
+                  return (
+                    <div className="bg-muted/20 rounded-md p-3 space-y-1.5 text-sm">
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>Subtotal</span>
+                        <span className="font-mono">Rs. {subtotal.toLocaleString("en-PK")}</span>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>Delivery</span>
+                        <span className="font-mono">
+                          {deliveryCharges != null
+                            ? (deliveryCharges === 0 ? "Free" : `Rs. ${deliveryCharges.toLocaleString("en-PK")}`)
+                            : "—"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between font-semibold text-foreground border-t border-border pt-1.5 mt-1.5">
+                        <span>Total</span>
+                        <span className="font-mono text-lg">Rs. {calculateTotal(view).toLocaleString("en-PK")}</span>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {/* Status */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-muted-foreground text-xs block mb-1">Update Status</span>
+                    <Select value={view.status} onValueChange={(v) => onStatusChange(view.id, v as OrderStatus)}>
+                      <SelectTrigger className={`h-7 text-xs w-36 border rounded-md px-2 ${statusColor[view.status]}`}><SelectValue /></SelectTrigger>
+                      <SelectContent>{ALL_STATUSES.map((s) => <SelectItem key={s} value={s} className="text-xs">{s}</SelectItem>)}</SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </div>
             </div>
