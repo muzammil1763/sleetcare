@@ -39,7 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     ?.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() ?? "AD";
 
   return (
-    <div className="min-h-screen flex bg-[#f7f8fc]" style={{ fontFamily: "var(--font-body), Jost, system-ui, sans-serif" }}>
+    <div className="min-h-screen flex bg-[#f7f8fc]" style={{ fontFamily: "Jost, system-ui, sans-serif" }}>
 
       {/* ── Desktop Sidebar ── */}
       <aside className="hidden lg:flex w-60 shrink-0 flex-col bg-[#1e2a5e] h-screen fixed left-0 top-0 z-40">

@@ -7,7 +7,7 @@ export async function GET() {
       // Exclude inquiry records (stored as orders with INQUIRY: prefix in date field)
       prisma.order.count({ where: { date: { not: { startsWith: "INQUIRY:" } } } }),
       prisma.product.count(),
-      prisma.user.count(),
+      prisma.user.count({ where: { role: { not: "Admin" } } }),
       prisma.service.findMany({ select: { id: true, active: true } }),
       prisma.engineeringService.findMany({ select: { id: true, active: true } }),
       prisma.order.findMany({

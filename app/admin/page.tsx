@@ -154,8 +154,8 @@ export default function AdminOverview() {
               <TrendingUp className="w-3.5 h-3.5 text-[#8fa0d8]" />
             </div>
             <div
-              className="text-3xl text-[#1e2a5e] mb-1"
-              style={{ fontFamily: "var(--font-display), Georgia, serif", fontWeight: 400 }}
+              className="text-3xl text-[#1e2a5e] mb-1 font-bold"
+              style={{ fontFamily: "Jost, var(--font-body), system-ui, sans-serif", fontWeight: 700 }}
             >
               {s.value}
             </div>
