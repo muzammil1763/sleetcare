@@ -76,7 +76,7 @@ export default function ProductDetail() {
 
         <div className="grid lg:grid-cols-2 gap-14">
 
-          {/* ── Left: Images + Video ── */}
+          {/* â”€â”€ Left: Images + Video â”€â”€ */}
           <div>
             {/* Main image / video toggle */}
             <div className="relative aspect-[3/4] overflow-hidden bg-[#dde8f8]">
@@ -165,18 +165,9 @@ export default function ProductDetail() {
                 </div>
               )}
             </div>
-                  className={`aspect-square bg-[#1e2a5e] cursor-pointer flex flex-col items-center justify-center gap-1 transition-all ${
-                    showVideo ? "ring-2 ring-[#8fa0d8]" : "opacity-70 hover:opacity-100"
-                  }`}
-                >
-                  <Play className="w-5 h-5 text-white fill-white" />
-                  <span className="text-[8px] font-medium uppercase tracking-[0.15em] text-[#c8d0f0]">Video</span>
-                </div>
-              )}
-            </div>
           </div>
 
-          {/* ── Right: Product Info ── */}
+          {/* â”€â”€ Right: Product Info â”€â”€ */}
           <div className="lg:pt-4">
             <p className="text-[10px] font-medium uppercase tracking-[0.25em] text-[#2d3a8c] mb-3">
               {product.category}
@@ -224,7 +215,7 @@ export default function ProductDetail() {
             <div className="flex items-center gap-2 mb-6">
               <div className={`w-2 h-2 rounded-full ${product.stock > 0 ? "bg-green-500" : "bg-red-400"}`} />
               <span className="text-[11px] font-light uppercase tracking-[0.12em] text-[#5a6380]">
-                {product.stock > 0 ? `In Stock — ${product.stock} units available` : "Out of Stock"}
+                {product.stock > 0 ? `In Stock â€” ${product.stock} units available` : "Out of Stock"}
               </span>
             </div>
 
@@ -249,7 +240,7 @@ export default function ProductDetail() {
               <button
                 onClick={() => {
                   addToCart(product.id, qty);
-                  toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
+                  toast({ title: "Added to cart", description: `${qty} Ã— ${product.name}` });
                   setQty(1);
                 }}
                 disabled={product.stock <= 0}
@@ -292,7 +283,7 @@ export default function ProductDetail() {
                   className="text-[#1e2a5e]"
                   style={{ fontFamily: "var(--font-display), Georgia, serif", fontSize: "22px", fontWeight: 400 }}
                 >
-                  {product.name} — Watch it in action
+                  {product.name} â€” Watch it in action
                 </h2>
               </div>
             </div>
