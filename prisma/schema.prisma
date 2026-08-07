@@ -64,20 +64,22 @@ model Service {
 }
 
 model Order {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
-  customer        String
-  email           String
-  phone           String?
-  status          OrderStatus @default(Pending)
-  total           Float
-  items           Int
-  date            String
-  shippingAddress Json?
-  userId          String?     @db.ObjectId
-  user            User?       @relation(fields: [userId], references: [id])
-  orderItems      OrderItem[]
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  customer          String
+  email             String
+  phone             String?
+  status            OrderStatus @default(Pending)
+  total             Float
+  items             Int
+  date              String
+  shippingAddress   Json?
+  paymentMethod     String?     @default("cod")
+  paymentScreenshot String?
+  userId            String?     @db.ObjectId
+  user              User?       @relation(fields: [userId], references: [id])
+  orderItems        OrderItem[]
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
 }
 
 model OrderItem {

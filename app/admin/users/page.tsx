@@ -126,7 +126,7 @@ export default function AdminUsers() {
       </div>
 
       <div className="glass-card overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto scrollbar-hide">
           <table className="w-full text-sm">
             <thead className="bg-muted/30 border-b border-border">
               <tr className="text-left text-[10px] font-mono uppercase tracking-wider text-muted-foreground">

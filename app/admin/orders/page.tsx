@@ -28,6 +28,8 @@ type Order = {
   total: number;
   items: number;
   createdAt?: string;
+  paymentMethod?: string;
+  paymentScreenshot?: string;
   orderItems?: OrderItem[];
   shippingAddress?: {
     phone?: string;
@@ -152,14 +154,14 @@ export default function AdminOrders() {
       </div>
 
       <div className="glass-card overflow-hidden">
-        <div className="overflow-x-auto max-w-full">
+        <div className="overflow-x-auto scrollbar-hide max-w-full">
           <table className="w-full text-sm min-w-max">
             <thead className="bg-muted/30 border-b border-border">
               <tr className="text-left text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
                 <th className="px-5 py-3">Date</th>
                 <th className="px-5 py-3">Customer</th>
+                <th className="px-5 py-3">Payment</th>
                 <th className="px-5 py-3">Status</th>
-                <th className="px-5 py-3 text-right">Items</th>
                 <th className="px-5 py-3 text-right">Total</th>
                 <th className="px-5 py-3 text-right">View</th>
               </tr>
@@ -180,6 +182,19 @@ export default function AdminOrders() {
                         <div className="text-[11px] text-muted-foreground">{o.email}</div>
                       </td>
                       <td className="px-5 py-3">
+                        <div className="flex flex-col gap-1">
+                          <span className={`text-[10px] font-medium px-2 py-0.5 border w-fit ${o.paymentMethod === "bank" ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-amber-50 text-amber-700 border-amber-200"}`}>
+                            {o.paymentMethod === "bank" ? "Bank Transfer" : "COD"}
+                          </span>
+                          {o.paymentMethod === "bank" && o.paymentScreenshot && (
+                            <span className="text-[9px] text-emerald-600 font-medium">✓ Screenshot</span>
+                          )}
+                          {o.paymentMethod === "bank" && !o.paymentScreenshot && (
+                            <span className="text-[9px] text-red-500 font-medium">⚠ No screenshot</span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-5 py-3">
                         <Select value={o.status} onValueChange={(v) => onStatusChange(o.id, v as OrderStatus)} disabled={updating === o.id}>
                           <SelectTrigger className={`h-7 text-xs w-32 border rounded-md px-2 ${statusColor[o.status]}`}>
                             <SelectValue />
@@ -189,7 +204,6 @@ export default function AdminOrders() {
                           </SelectContent>
                         </Select>
                       </td>
-                      <td className="px-5 py-3 text-right font-mono">{o.items}</td>
                       <td className="px-5 py-3 text-right font-mono font-semibold">Rs. {total.toLocaleString("en-PK")}</td>
                       <td className="px-5 py-3 text-right">
                         <button onClick={() => setView(o)} className="p-2 rounded-md hover:bg-muted transition"><Eye className="w-3.5 h-3.5" /></button>
@@ -231,7 +245,41 @@ export default function AdminOrders() {
                   <span className="text-muted-foreground text-xs">Items</span>
                   <div className="font-mono">{view.items}</div>
                 </div>
+                <div className="border-b border-border pb-2">
+                  <span className="text-muted-foreground text-xs">Payment</span>
+                  <div>
+                    <span className={`text-[10px] font-medium px-2 py-0.5 border ${view.paymentMethod === "bank" ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-amber-50 text-amber-700 border-amber-200"}`}>
+                      {view.paymentMethod === "bank" ? "Bank Transfer" : "Cash on Delivery"}
+                    </span>
+                  </div>
+                </div>
               </div>
+
+              {/* Payment Screenshot */}
+              {view.paymentMethod === "bank" && (
+                <div className="border-t border-border pt-4">
+                  <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-3">
+                    Payment Screenshot
+                  </h3>
+                  {view.paymentScreenshot ? (
+                    <div className="space-y-2">
+                      <img
+                        src={view.paymentScreenshot}
+                        alt="Payment proof"
+                        className="w-full max-h-64 object-contain border border-border bg-muted/20 rounded-md"
+                      />
+                      <a href={view.paymentScreenshot} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs text-[#2d3a8c] hover:underline">
+                        Open full size ↗
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+                      <p className="text-xs text-red-600 font-medium">⚠ No payment screenshot uploaded by customer</p>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Shipping Address */}
               {view.shippingAddress && (

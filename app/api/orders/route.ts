@@ -6,6 +6,8 @@ const orderSchema = z.object({
   customer: z.string().min(1),
   email: z.string().email(),
   phone: z.string().optional(),
+  paymentMethod: z.string().optional(),
+  paymentScreenshot: z.string().optional(),
   items: z.array(z.object({ productId: z.string(), qty: z.number().int().positive() })),
   shippingAddress: z.object({
     phone: z.string().optional(),
@@ -39,7 +41,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { customer, email, phone, items, shippingAddress } = orderSchema.parse(body);
+    const { customer, email, phone, items, shippingAddress, paymentMethod, paymentScreenshot } = orderSchema.parse(body);
 
     // Fetch product prices
     const products = await prisma.product.findMany({
@@ -69,7 +71,9 @@ export async function POST(req: NextRequest) {
         date: new Date().toISOString(),
         status: "Pending",
         shippingAddress: shippingAddress || null,
-        userId: user?.id, // Link to user if found
+        paymentMethod: paymentMethod || "cod",
+        paymentScreenshot: paymentScreenshot || null,
+        userId: user?.id,
         orderItems: {
           create: items.map((item) => ({
             productId: item.productId,

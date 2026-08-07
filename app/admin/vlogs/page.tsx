@@ -205,7 +205,7 @@ export default function AdminVlogs() {
 
       {/* Table */}
       <div className="bg-white border border-[#dde2f0] overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto scrollbar-hide">
           <table className="w-full text-sm min-w-max">
             <thead className="border-b border-[#dde2f0] bg-[#f7f8fc]">
               <tr className="text-left">

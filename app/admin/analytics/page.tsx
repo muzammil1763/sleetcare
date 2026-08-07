@@ -160,7 +160,7 @@ export default function AdminAnalytics() {
           <h3 className="font-semibold">Product catalog summary</h3>
           <p className="text-xs text-muted-foreground mt-1">Live data from MongoDB — {products.length} products total.</p>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto scrollbar-hide">
           <table className="w-full text-sm">
             <thead className="bg-muted/30">
               <tr className="text-left text-[10px] font-mono uppercase tracking-wider text-muted-foreground">

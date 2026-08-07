@@ -98,6 +98,7 @@ export default function OrderConfirmation() {
               { label: "Customer",  value: order.customer },
               { label: "Email",     value: order.email },
               ...(order.phone ? [{ label: "Phone", value: order.phone, mono: false }] : []),
+              { label: "Payment",   value: (order as any).paymentMethod === "bank" ? "Bank Transfer" : "Cash on Delivery" },
               { label: "Status",    value: order.status },
               { label: "Items",     value: String(totalItems) },
             ].map((row, i, arr) => (

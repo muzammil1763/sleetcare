@@ -58,12 +58,13 @@ async function main() {
   console.log('⚙️  Creating site settings...');
   await prisma.siteSettings.createMany({
     data: [
-      { key: 'contact_email',    value: 'hello@sleetcare.com' },
-      { key: 'contact_phone',    value: '+92 300 8662833' },
-      { key: 'contact_whatsapp', value: '923008662833' },
-      { key: 'contact_address',  value: 'Faisalabad, Punjab, Pakistan' },
-      { key: 'company_tagline',  value: 'Clean beauty. Conscious choices. Confidence, naturally.' },
-      { key: 'company_name',     value: 'Sleet Care' },
+      { key: 'contact_email',      value: 'hello@sleetcare.com' },
+      { key: 'contact_phone',      value: '+92 300 8662833' },
+      { key: 'contact_whatsapp',   value: '923008662833' },
+      { key: 'contact_address',    value: 'Faisalabad, Punjab, Pakistan' },
+      { key: 'company_tagline',    value: 'Clean beauty. Conscious choices. Confidence, naturally.' },
+      { key: 'company_name',       value: 'Sleet Care' },
+      { key: 'delivery_charges',   value: '250' },
     ],
   });
   console.log('✅ Site settings created');

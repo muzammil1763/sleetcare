@@ -174,7 +174,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           )}
         </div>
 
-        <main className="flex-1 p-5 lg:p-8 mt-14 lg:mt-0">{children}</main>
+        <main className="flex-1 p-5 lg:p-8 mt-14 lg:mt-0 scrollbar-hide">{children}</main>
       </div>
     </div>
   );

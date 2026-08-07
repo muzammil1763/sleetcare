@@ -3,17 +3,27 @@
 import Link from "next/link";
 import { useAppStore } from "@/store/AppStore";
 import { productIcons } from "@/data/mock";
-import { Button } from "@/components/ui/button";
 import { Package, Minus, Plus, Trash2, ArrowRight, ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const LOCAL_IMGS = ["/img1.png", "/img2.png", "/img3.png"];
 
 export default function Cart() {
   const { cart, products, updateCartQty, removeFromCart } = useAppStore();
+  const [deliveryCharges, setDeliveryCharges] = useState(250);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then(r => r.json())
+      .then(d => { if (d?.delivery_charges) setDeliveryCharges(Number(d.delivery_charges)); })
+      .catch(() => {});
+  }, []);
+
   const items = cart
     .map((i) => ({ ...i, product: products.find((p) => p.id === i.productId)! }))
     .filter((i) => i.product);
   const subtotal = items.reduce((s, i) => s + i.product.price * i.qty, 0);
+  const total = subtotal + deliveryCharges;
 
   if (items.length === 0) {
     return (
@@ -112,23 +122,18 @@ export default function Cart() {
                   <dd className="font-medium text-[#1e2a5e]">Rs. {subtotal.toLocaleString("en-PK")}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-[#5a6380] font-light">Shipping</dt>
-                  <dd className="text-[#2d3a8c] font-medium">
-                    {subtotal >= 5000 ? "Free" : "Rs. 250"}
+                  <dt className="text-[#5a6380] font-light">Delivery</dt>
+                  <dd className={`font-medium ${deliveryCharges === 0 ? "text-emerald-600" : "text-[#1e2a5e]"}`}>
+                    {deliveryCharges === 0 ? "Free" : `Rs. ${deliveryCharges.toLocaleString("en-PK")}`}
                   </dd>
                 </div>
               </dl>
               <div className="border-t border-[#dde2f0] mt-5 pt-5 flex justify-between items-baseline">
                 <span className="text-sm text-[#5a6380]">Total</span>
                 <span className="font-display text-2xl text-[#1e2a5e]">
-                  Rs. {(subtotal + (subtotal >= 5000 ? 0 : 250)).toLocaleString("en-PK")}
+                  Rs. {total.toLocaleString("en-PK")}
                 </span>
               </div>
-              {subtotal < 5000 && (
-                <p className="text-[10px] font-light text-[#8fa0d8] mt-2 text-center">
-                  Add Rs. {(5000 - subtotal).toLocaleString("en-PK")} more for free shipping
-                </p>
-              )}
               <Link href="/checkout">
                 <button className="w-full mt-6 h-12 bg-[#1e2a5e] text-white text-[11px] font-medium uppercase tracking-[0.2em] hover:bg-[#2d3a8c] transition-colors flex items-center justify-center gap-2">
                   Checkout <ArrowRight className="w-3.5 h-3.5" />

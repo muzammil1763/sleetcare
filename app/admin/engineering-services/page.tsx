@@ -158,7 +158,7 @@ export default function EngineeringServicesAdmin() {
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
       ) : (
-        <div className="glass-card overflow-x-auto">
+        <div className="glass-card overflow-x-auto scrollbar-hide">
           <table className="w-full min-w-max">
             <thead className="border-b border-border">
               <tr className="text-left text-sm text-muted-foreground">

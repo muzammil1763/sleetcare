@@ -192,6 +192,19 @@
 }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 
+/* Hide scrollbar globally but keep scroll functionality */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar { display: none; }
+
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+body::-webkit-scrollbar { display: none; }
+
 .scrollbar-default::-webkit-scrollbar { height: 6px; }
 .scrollbar-default::-webkit-scrollbar-track { background: hsl(var(--muted)); }
 .scrollbar-default::-webkit-scrollbar-thumb {
