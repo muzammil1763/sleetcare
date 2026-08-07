@@ -132,6 +132,8 @@ export default function OrderConfirmation() {
   const totalItems = order.orderItems.reduce((sum, item) => sum + item.qty, 0);
   const deliveryCharges = order.shippingAddress?.deliveryCharges;
   const subtotal = order.orderItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+  // For orders where delivery was charged but not stored separately, derive it from the difference
+  const effectiveDelivery = deliveryCharges != null ? deliveryCharges : (order.total > subtotal ? order.total - subtotal : null);
 
   return (
     <div className="bg-[#f7f8fc] min-h-screen">
@@ -279,7 +281,7 @@ export default function OrderConfirmation() {
 
         {/* Order Total — with breakdown */}
         <div className="bg-[#1e2a5e] p-6 mb-8">
-          {deliveryCharges != null && (
+          {effectiveDelivery != null && (
             <div className="space-y-2 mb-4 pb-4 border-b border-[#2d3a8c]">
               <div className="flex justify-between text-sm">
                 <span className="font-light text-[#c8d0f0]">Products subtotal</span>
@@ -288,17 +290,18 @@ export default function OrderConfirmation() {
               <div className="flex justify-between text-sm">
                 <span className="font-light text-[#c8d0f0]">Delivery charges</span>
                 <span className="font-medium text-white">
-                  {deliveryCharges === 0 ? "Free" : `Rs. ${deliveryCharges.toLocaleString("en-PK")}`}
+                  {effectiveDelivery === 0 ? "Free" : `Rs. ${effectiveDelivery.toLocaleString("en-PK")}`}
                 </span>
               </div>
             </div>
           )}
           <div className="flex justify-between items-center">
             <span className="text-sm font-medium uppercase tracking-[0.15em] text-[#c8d0f0]">Order Total</span>
-            <span className="font-display text-3xl text-white">Rs. {order.total.toLocaleString("en-PK")}</span>
+            <span className="text-2xl font-bold text-white" style={{ fontFamily: "Jost, system-ui, sans-serif" }}>
+              Rs. {order.total.toLocaleString("en-PK")}
+            </span>
           </div>
         </div>
-
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3 justify-center">
           <Link href="/shop">
