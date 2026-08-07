@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Pencil, Trash2, Plus, Search, RefreshCw, Loader2 } from "lucide-react";
+import { Pencil, Trash2, Plus, Search, RefreshCw, Loader2, Upload, X, Video } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import ImageUpload from "@/components/ui/image-upload";
 import { Switch } from "@/components/ui/switch";
@@ -199,49 +199,134 @@ export default function AdminProducts() {
         <DialogContent className="bg-card border-border max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hide">
           <DialogHeader><DialogTitle>{editing ? "Edit product" : "Add product"}</DialogTitle></DialogHeader>
           <div className="space-y-4 pr-4">
-            <ImageUpload value={form.image} onChange={(url) => setForm({ ...form, image: url })} folder="majestic/products" label="Main Product Image" />
+            <ImageUpload value={form.image} onChange={(url) => setForm({ ...form, image: url })} folder="sleetcare/products" label="Main Product Image" />
             
-            {/* Multiple Images Upload */}
+            {/* Multiple Images + Video Upload */}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <Label>Product Gallery</Label>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setForm({ ...form, images: [...form.images, ""] })}
-                >
-                  <Plus className="w-3 h-3 mr-1" /> Add Image
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setForm({ ...form, images: [...form.images, ""] })}
+                  >
+                    <Plus className="w-3 h-3 mr-1" /> Add Image
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setForm({ ...form, images: [...form.images, "video:"] })}
+                    className="text-purple-600 border-purple-200 hover:bg-purple-50"
+                  >
+                    <Plus className="w-3 h-3 mr-1" /> Add Video
+                  </Button>
+                </div>
               </div>
               <div className="space-y-3">
-                {form.images.map((img, i) => (
-                  <div key={i} className="flex gap-2 items-start">
-                    <div className="flex-1">
-                      <ImageUpload 
-                        value={img} 
-                        onChange={(url) => {
-                          const newImages = [...form.images];
-                          newImages[i] = url;
-                          setForm({ ...form, images: newImages });
-                        }} 
-                        folder="majestic/products" 
-                        label={`Gallery Image ${i + 1}`}
-                      />
+                {form.images.map((img, i) => {
+                  const isVideo = img.startsWith("video:");
+                  const videoUrl = isVideo ? img.replace("video:", "") : "";
+                  return (
+                    <div key={i} className="flex gap-2 items-start">
+                      <div className="flex-1">
+                        {isVideo ? (
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-purple-600">Gallery Video {i + 1}</label>
+                            {videoUrl ? (
+                              <div className="relative rounded-xl overflow-hidden border border-purple-200 group">
+                                <video
+                                  src={videoUrl}
+                                  controls
+                                  className="w-full h-48 object-cover bg-black"
+                                />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                                  <label className="bg-white text-slate-900 text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-100 transition flex items-center gap-1.5 cursor-pointer">
+                                    <Upload className="w-3.5 h-3.5" /> Replace
+                                    <input type="file" accept="video/*" className="hidden"
+                                      onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+                                        const fd = new FormData();
+                                        fd.append("file", file);
+                                        fd.append("folder", "sleetcare/products");
+                                        const res = await fetch("/api/upload", { method: "POST", body: fd });
+                                        const data = await res.json();
+                                        if (data.url) {
+                                          const newImages = [...form.images];
+                                          newImages[i] = `video:${data.url}`;
+                                          setForm({ ...form, images: newImages });
+                                        }
+                                      }}
+                                    />
+                                  </label>
+                                  <button type="button" onClick={() => { const n = [...form.images]; n[i] = "video:"; setForm({ ...form, images: n }); }}
+                                    className="bg-red-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-red-600 transition flex items-center gap-1.5">
+                                    <X className="w-3.5 h-3.5" /> Remove
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <label className="border-2 border-dashed border-purple-200 rounded-xl h-40 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-purple-400 hover:bg-purple-50/30 transition">
+                                <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center">
+                                  <Video className="w-6 h-6 text-purple-500" />
+                                </div>
+                                <div className="text-center">
+                                  <p className="text-sm font-medium text-purple-600">Click to upload video</p>
+                                  <p className="text-xs text-muted-foreground mt-0.5">MP4, MOV, WebM up to 100MB</p>
+                                </div>
+                                <input type="file" accept="video/*" className="hidden"
+                                  onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+                                    toast({ title: "Uploading video…", description: "This may take a moment." });
+                                    const fd = new FormData();
+                                    fd.append("file", file);
+                                    fd.append("folder", "sleetcare/products");
+                                    const res = await fetch("/api/upload", { method: "POST", body: fd });
+                                    const data = await res.json();
+                                    if (data.url) {
+                                      const newImages = [...form.images];
+                                      newImages[i] = `video:${data.url}`;
+                                      setForm({ ...form, images: newImages });
+                                      toast({ title: "Video uploaded" });
+                                    } else {
+                                      toast({ title: "Upload failed", description: data.error, variant: "destructive" });
+                                    }
+                                  }}
+                                />
+                              </label>
+                            )}
+                          </div>
+                        ) : (
+                          <ImageUpload
+                            value={img}
+                            onChange={(url) => {
+                              const newImages = [...form.images];
+                              newImages[i] = url;
+                              setForm({ ...form, images: newImages });
+                            }}
+                            folder="sleetcare/products"
+                            label={`Gallery Image ${i + 1}`}
+                          />
+                        )}
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => setForm({ ...form, images: form.images.filter((_, idx) => idx !== i) })}
+                        className="shrink-0 mt-6"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
                     </div>
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      size="icon" 
-                      onClick={() => setForm({ ...form, images: form.images.filter((_, idx) => idx !== i) })}
-                      className="shrink-0 mt-6"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </Button>
-                  </div>
-                ))}
+                  );
+                })}
                 {form.images.length === 0 && (
-                  <p className="text-xs text-muted-foreground text-center py-4">No gallery images added yet</p>
+                  <p className="text-xs text-muted-foreground text-center py-4">No gallery images or videos added yet</p>
                 )}
               </div>
             </div>

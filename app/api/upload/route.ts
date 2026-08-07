@@ -24,9 +24,18 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    const isVideo = file.type.startsWith("video/");
+
     const result = await new Promise<any>((resolve, reject) => {
       cloudinary.uploader.upload_stream(
-        { folder, resource_type: "image", transformation: [{ quality: "auto", fetch_format: "auto" }] },
+        {
+          folder,
+          resource_type: isVideo ? "video" : "image",
+          ...(isVideo
+            ? { chunk_size: 6000000 }
+            : { transformation: [{ quality: "auto", fetch_format: "auto" }] }
+          ),
+        },
         (err, res) => { if (err) reject(err); else resolve(res); }
       ).end(buffer);
     });
