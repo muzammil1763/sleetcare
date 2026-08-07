@@ -29,7 +29,7 @@ const faqs = [
   { q: "Are your products suitable for sensitive skin?", a: "Yes — all Sleet Care formulas are tested on all six Fitzpatrick skin types, fragrance-free, and free from common irritants." },
   { q: "Do you offer routine advice?",                   a: "Absolutely. Reach out via WhatsApp or the contact form with your skin type and concerns — our team will suggest a personalised routine." },
   { q: "Do you sell wholesale or to salons?",            a: "Yes, we offer wholesale pricing for salons, clinics, and retailers. Minimum order of 10 units per SKU. Contact us for a price list." },
-  { q: "What payment methods do you accept?",            a: "We accept bank transfer, Easypaisa, JazzCash, and cash on delivery across Pakistan." },
+  { q: "What payment methods do you accept?",            a: "We accept bank transfer to Meezan Bank (Account: Muhammad Hanan Ajmal, IBAN: PK17 MEZN 0004 1301 0517 0552) and cash on delivery across Pakistan." },
   { q: "Can I track my order?",                          a: "Yes — once dispatched you'll receive a tracking number via WhatsApp and email within 24 hours." },
   { q: "Are ingredients listed on the packaging?",       a: "Always. Full INCI ingredient lists appear on every carton, and the exact percentage of every active is listed on our product pages." },
 ];

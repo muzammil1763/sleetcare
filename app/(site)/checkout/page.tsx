@@ -232,7 +232,7 @@ export default function Checkout() {
                     <CreditCard className={`w-5 h-5 ${paymentMethod === "bank" ? "text-white" : "text-[#2d3a8c]"}`} />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-[#1e2a5e] mb-1">Bank / EasyPaisa / JazzCash</p>
+                    <p className="text-sm font-medium text-[#1e2a5e] mb-1">Bank Transfer</p>
                     <p className="text-xs font-light text-[#5a6380] leading-relaxed">Transfer payment before dispatch. Details sent by WhatsApp.</p>
                   </div>
                   {paymentMethod === "bank" && (
@@ -258,14 +258,39 @@ export default function Checkout() {
                   <div className="p-4 bg-[#eef0f8] border border-[#dde2f0] space-y-2">
                     <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#2d3a8c] mb-3">Payment Details</p>
                     {[
-                      { label: "Account Name", value: "Sleet Care" },
-                      { label: "Bank",         value: "HBL / Meezan Bank" },
-                      { label: "EasyPaisa",    value: "+92 300 8662833" },
-                      { label: "JazzCash",     value: "+92 300 8662833" },
+                      { label: "Bank",           value: "Meezan Bank Limited",           copy: false },
+                      { label: "Branch",         value: "Tata Market Branch, Faisalabad", copy: false },
+                      { label: "Branch Code",    value: "0413",                           copy: false },
+                      { label: "Account Title",  value: "Muhammad Hanan Ajmal",           copy: false },
+                      { label: "Account No.",    value: "0413 0105170552",                copy: true  },
+                      { label: "IBAN",           value: "PK17 MEZN 0004 1301 0517 0552",  copy: true  },
                     ].map(r => (
-                      <div key={r.label} className="flex justify-between text-xs">
+                      <div key={r.label} className="flex justify-between items-center text-xs">
                         <span className="font-light text-[#5a6380]">{r.label}</span>
-                        <span className="font-medium text-[#1e2a5e]">{r.value}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className={`font-medium text-[#1e2a5e] ${r.copy ? "font-mono" : ""}`}>{r.value}</span>
+                          {r.copy && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                navigator.clipboard.writeText(r.value);
+                                const el = document.getElementById(`copied-${r.label}`);
+                                if (el) { el.style.display = "inline"; setTimeout(() => { el.style.display = "none"; }, 1500); }
+                              }}
+                              className="ml-1 p-1 bg-[#1e2a5e] text-white hover:bg-[#2d3a8c] transition-colors"
+                              title={`Copy ${r.label}`}
+                            >
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                              </svg>
+                            </button>
+                          )}
+                          {r.copy && (
+                            <span id={`copied-${r.label}`} style={{ display: "none" }}
+                              className="text-[9px] text-emerald-600 font-medium">Copied!</span>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
