@@ -4,6 +4,7 @@ import { z } from "zod";
 
 const updateSchema = z.object({
   status: z.enum(["Pending", "Processing", "Shipped", "Delivered", "Cancelled"]).optional(),
+  paymentScreenshot: z.string().optional(),
 });
 
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
