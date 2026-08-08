@@ -144,10 +144,20 @@ export default function GuestCheckout() {
   return (
     <div className="bg-[#f7f8fc] min-h-screen">
       <div className="container pt-10 pb-16 max-w-5xl">
-        <div className="flex items-center justify-between mb-10">
-          <h1 className="font-display text-3xl md:text-4xl text-[#1e2a5e]">Guest Checkout</h1>
-          <Link href="/login?callbackUrl=/checkout" className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#2d3a8c] hover:text-[#1e2a5e] transition-colors">
-            Sign in instead →
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="font-display text-3xl md:text-4xl text-[#1e2a5e]">Checkout</h1>
+        </div>
+
+        {/* Login option banner */}
+        <div className="bg-white border border-[#dde2f0] p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-medium text-[#1e2a5e]">Already have an account?</p>
+            <p className="text-xs font-light text-[#5a6380]">Sign in for faster checkout and order tracking from your dashboard.</p>
+          </div>
+          <Link href="/login?callbackUrl=/checkout" className="shrink-0">
+            <button className="h-9 px-6 border border-[#1e2a5e] text-[11px] font-medium uppercase tracking-[0.15em] text-[#1e2a5e] hover:bg-[#1e2a5e] hover:text-white transition-colors whitespace-nowrap">
+              Sign In
+            </button>
           </Link>
         </div>
 
