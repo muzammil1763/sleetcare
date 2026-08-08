@@ -74,12 +74,12 @@ export default function ProductDetail() {
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Collection
         </Link>
 
-        <div className="grid lg:grid-cols-2 gap-14">
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
 
           {/* â”€â”€ Left: Images + Video â”€â”€ */}
           <div>
             {/* Main image / video toggle */}
-            <div className="relative aspect-[3/4] overflow-hidden bg-[#dde8f8]">
+            <div className="relative overflow-hidden bg-[#dde8f8]" style={{ height: "400px" }}>
               {showVideo && embedUrl ? (
                 <iframe src={embedUrl} className="w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -115,7 +115,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Thumbnails row */}
-            <div className="grid grid-cols-5 gap-2 mt-3">
+            <div className="grid grid-cols-5 gap-2 mt-2">
               {/* Main image */}
               {product.image && (
                 <div onClick={() => { setSelectedImage(null); setShowVideo(false); setSelectedGalleryVideo(null); }}
@@ -219,38 +219,51 @@ export default function ProductDetail() {
               </span>
             </div>
 
-            {/* Qty + Add to Cart */}
-            <div className="flex items-center gap-4 mb-4">
-              <div className="flex items-center border border-[#dde2f0]">
+            {/* Qty + Add to Cart + Shop Now */}
+            <div className="space-y-3 mb-4">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center border border-[#dde2f0]">
+                  <button
+                    className="w-10 h-12 flex items-center justify-center text-[#5a6380] hover:text-[#1e2a5e] hover:bg-[#eef0f8] transition-colors"
+                    onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  >
+                    <Minus className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="w-12 text-center text-sm font-medium text-[#1e2a5e]">{qty}</span>
+                  <button
+                    className="w-10 h-12 flex items-center justify-center text-[#5a6380] hover:text-[#1e2a5e] hover:bg-[#eef0f8] transition-colors"
+                    onClick={() => setQty((q) => q + 1)}
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
                 <button
-                  className="w-10 h-12 flex items-center justify-center text-[#5a6380] hover:text-[#1e2a5e] hover:bg-[#eef0f8] transition-colors"
-                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  onClick={() => {
+                    addToCart(product.id, qty);
+                    toast({ title: "Added to cart", description: `${qty} × ${product.name}` });
+                    setQty(1);
+                  }}
+                  disabled={product.stock <= 0}
+                  className="flex-1 h-12 border border-[#1e2a5e] text-[#1e2a5e] text-[11px] font-medium uppercase tracking-[0.2em] hover:bg-[#eef0f8] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  <Minus className="w-3.5 h-3.5" />
+                  {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
                 </button>
-                <span className="w-12 text-center text-sm font-medium text-[#1e2a5e]">{qty}</span>
-                <button
-                  className="w-10 h-12 flex items-center justify-center text-[#5a6380] hover:text-[#1e2a5e] hover:bg-[#eef0f8] transition-colors"
-                  onClick={() => setQty((q) => q + 1)}
-                >
-                  <Plus className="w-3.5 h-3.5" />
+
+                <button className="w-12 h-12 border border-[#dde2f0] flex items-center justify-center text-[#5a6380] hover:text-[#1e2a5e] hover:border-[#1e2a5e] transition-colors shrink-0">
+                  <Heart className="w-4 h-4" />
                 </button>
               </div>
 
               <button
                 onClick={() => {
                   addToCart(product.id, qty);
-                  toast({ title: "Added to cart", description: `${qty} Ã— ${product.name}` });
-                  setQty(1);
+                  router.push("/cart");
                 }}
                 disabled={product.stock <= 0}
-                className="flex-1 h-12 bg-[#1e2a5e] text-white text-[11px] font-medium uppercase tracking-[0.2em] hover:bg-[#2d3a8c] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full h-12 bg-[#1e2a5e] text-white text-[11px] font-medium uppercase tracking-[0.2em] hover:bg-[#2d3a8c] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
-              </button>
-
-              <button className="w-12 h-12 border border-[#dde2f0] flex items-center justify-center text-[#5a6380] hover:text-[#1e2a5e] hover:border-[#1e2a5e] transition-colors">
-                <Heart className="w-4 h-4" />
+                Shop Now
               </button>
             </div>
 
