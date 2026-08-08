@@ -159,6 +159,7 @@ export default function AdminOrders() {
           <table className="w-full text-sm min-w-max">
             <thead className="bg-muted/30 border-b border-border">
               <tr className="text-left text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
+                <th className="px-5 py-3">Order ID</th>
                 <th className="px-5 py-3">Date</th>
                 <th className="px-5 py-3">Customer</th>
                 <th className="px-5 py-3">Payment</th>
@@ -169,14 +170,15 @@ export default function AdminOrders() {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} className="px-5 py-12 text-center"><Loader2 className="w-6 h-6 animate-spin text-primary mx-auto" /></td></tr>
+                <tr><td colSpan={7} className="px-5 py-12 text-center"><Loader2 className="w-6 h-6 animate-spin text-primary mx-auto" /></td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={6} className="px-5 py-10 text-center text-muted-foreground">No orders found.</td></tr>
+                <tr><td colSpan={7} className="px-5 py-10 text-center text-muted-foreground">No orders found.</td></tr>
               ) : (
                 filtered.map((o) => {
                   const total = calculateTotal(o);
                   return (
                     <tr key={o.id} className="border-b border-border/40 hover:bg-muted/20 transition">
+                      <td className="px-5 py-3 font-mono text-xs text-muted-foreground">#{o.id.slice(-8).toUpperCase()}</td>
                       <td className="px-5 py-3 font-mono text-muted-foreground text-xs">{formatDate(o.date || o.createdAt || "")}</td>
                       <td className="px-5 py-3">
                         <div className="font-medium">{o.customer}</div>

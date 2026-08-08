@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/AppStore";
 import { productIcons } from "@/data/mock";
 import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight, ShoppingBag, Package, Heart } from "lucide-react";
@@ -30,6 +31,7 @@ const LOCAL_IMGS = ["/img1.png", "/img2.png", "/img3.png"];
 
 export default function ShopPage() {
   const { products, loading, loadProducts, addToCart } = useAppStore();
+  const router = useRouter();
   const [categories, setCategories] = useState<string[]>(["All"]);
   const [cat, setCat] = useState<string>("All");
   const [q, setQ] = useState("");
@@ -247,20 +249,29 @@ export default function ShopPage() {
                             </div>
                           )}
                           <div className="absolute bottom-0 left-0 right-0 bg-[#1e2a5e]/90 px-4 py-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                            <button
-                              onClick={() => {
-                                addToCart(p.id, 1);
-                                const t = document.createElement("div");
-                                t.className = "fixed bottom-4 right-4 bg-[#1e2a5e] text-white px-6 py-3 shadow-xl z-50 text-sm font-body font-light tracking-wide";
-                                t.textContent = "Added to cart";
-                                document.body.appendChild(t);
-                                setTimeout(() => t.remove(), 2000);
-                              }}
-                              disabled={p.stock <= 0}
-                              className="w-full text-[10px] font-body font-medium uppercase tracking-[0.2em] text-white disabled:opacity-50"
-                            >
-                              Quick Add
-                            </button>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => {
+                                  addToCart(p.id, 1);
+                                  const t = document.createElement("div");
+                                  t.className = "fixed bottom-4 right-4 bg-[#1e2a5e] text-white px-6 py-3 shadow-xl z-50 text-sm font-body font-light tracking-wide";
+                                  t.textContent = "Added to cart";
+                                  document.body.appendChild(t);
+                                  setTimeout(() => t.remove(), 2000);
+                                }}
+                                disabled={p.stock <= 0}
+                                className="flex-1 text-[10px] font-body font-medium uppercase tracking-[0.15em] text-white border border-white/40 py-1.5 hover:bg-white/10 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
+                              >
+                                Add to Cart
+                              </button>
+                              <button
+                                onClick={() => { addToCart(p.id, 1); router.push("/cart"); }}
+                                disabled={p.stock <= 0}
+                                className="flex-1 text-[10px] font-body font-medium uppercase tracking-[0.15em] text-[#1e2a5e] bg-white py-1.5 hover:bg-[#eef0f8] transition-colors disabled:opacity-50"
+                              >
+                                Shop Now
+                              </button>
+                            </div>
                           </div>
                         </div>
                         <div className="pt-4">

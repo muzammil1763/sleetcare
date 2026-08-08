@@ -13,6 +13,8 @@
     "db:seed": "ts-node --project tsconfig.seed.json prisma/seed.ts",
     "db:reset": "ts-node --project tsconfig.seed.json scripts/reset-db.ts",
     "db:fresh": "npm run db:reset -- --force && npm run db:seed",
+    "db:clean": "ts-node --project tsconfig.seed.json scripts/clean-demo-data.ts",
+    "db:clean-force": "ts-node --project tsconfig.seed.json scripts/clean-demo-data.ts --force",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "seo:submit": "ts-node scripts/submit-to-search-engines.ts",
@@ -77,11 +79,13 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.9",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "nodemailer": "^7.0.13"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",
     "@types/bcryptjs": "^2.4.6",
+    "@types/nodemailer": "^6.4.17",
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",

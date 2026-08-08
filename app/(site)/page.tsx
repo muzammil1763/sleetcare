@@ -5,11 +5,13 @@ import { ArrowRight, Heart, ShoppingBag, Package, Leaf, FlaskConical, Heart as H
 import { useAppStore } from "@/store/AppStore";
 import { productIcons } from "@/data/mock";
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 type CategoryWithImage = { id: string; name: string; description: string; image: string | null; };
 
 export default function Home() {
   const { products: storeProducts, loadProducts, addToCart } = useAppStore();
+  const router = useRouter();
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [stats, setStats] = useState([
     { label: "Cruelty Free",     value: "100%" },
@@ -158,34 +160,20 @@ export default function Home() {
             </Link>
           </div>
           {activeProducts.length === 0 ? (
-            /* ── Fallback cards using local images ── */
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-              {[
-                { src: "/img1.png", name: "Glow Face Serum",       category: "Skin Care",   price: "Rs. 2,499" },
-                { src: "/img2.png", name: "Hydrating Moisturiser", category: "Skin Care",   price: "Rs. 1,999" },
-                { src: "/img3.png", name: "Radiance Face Wash",    category: "Cleansers",   price: "Rs. 1,299" },
-                { src: "/img1.png", name: "Rose Water Toner",      category: "Toners",      price: "Rs. 1,599" },
-              ].map((item, i) => (
-                <Link key={i} href="/shop" className="group">
-                  <div className="relative aspect-[3/4] overflow-hidden bg-[#dde8f8]">
-                    <img src={item.src} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                    {i === 0 && (
-                      <div className="absolute top-3 left-3 bg-[#1e2a5e] text-white text-[9px] font-medium uppercase tracking-[0.1em] px-2 py-1">Bestseller</div>
-                    )}
-                    {i === 2 && (
-                      <div className="absolute top-3 left-3 bg-[#2d3a8c] text-white text-[9px] font-medium uppercase tracking-[0.1em] px-2 py-1">New</div>
-                    )}
-                    <div className="absolute bottom-0 left-0 right-0 bg-[#1e2a5e]/90 px-4 py-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                      <p className="w-full text-[11px] font-medium uppercase tracking-[0.18em] text-white text-center">View Product</p>
-                    </div>
-                  </div>
-                  <div className="pt-4 pb-2">
-                    <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#2d3a8c] mb-1">{item.category}</p>
-                    <h3 className="font-display text-lg text-[#1e2a5e] leading-snug group-hover:text-[#2d3a8c] transition-colors">{item.name}</h3>
-                    <p className="mt-2 text-sm font-medium text-[#1e2a5e]">{item.price}</p>
-                  </div>
-                </Link>
-              ))}
+            /* ── Empty state — no fake products ── */
+            <div className="text-center py-16">
+              <div className="w-16 h-16 mx-auto border border-[#dde2f0] flex items-center justify-center mb-6">
+                <ShoppingBag className="w-7 h-7 text-[#8fa0d8]" />
+              </div>
+              <h3 className="font-display text-2xl text-[#1e2a5e] mb-3">Collection coming soon</h3>
+              <p className="text-sm font-light text-[#5a6380] mb-6 max-w-sm mx-auto">
+                Our products are being added. Check back shortly or get in touch with us.
+              </p>
+              <Link href="/contact">
+                <button className="border border-[#1e2a5e] text-[#1e2a5e] text-[11px] font-medium uppercase tracking-[0.2em] px-8 py-3 hover:bg-[#1e2a5e] hover:text-white transition-colors">
+                  Contact Us
+                </button>
+              </Link>
             </div>
           ) : (
             <>
@@ -206,10 +194,18 @@ export default function Home() {
                           </div>
                         )}
                         <div className="absolute bottom-0 left-0 right-0 bg-[#1e2a5e]/90 px-4 py-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                          <button onClick={() => { addToCart(p.id, 1); const t = document.createElement("div"); t.className = "fixed bottom-4 right-4 bg-[#1e2a5e] text-white px-6 py-3 shadow-xl z-50 text-sm font-light"; t.textContent = "Added to cart"; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }}
-                            className="w-full text-[11px] font-medium uppercase tracking-[0.18em] text-white flex items-center justify-center gap-2">
-                            <ShoppingBag className="w-3.5 h-3.5" /> Add to Cart
-                          </button>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => { addToCart(p.id, 1); const t = document.createElement("div"); t.className = "fixed bottom-4 right-4 bg-[#1e2a5e] text-white px-6 py-3 shadow-xl z-50 text-sm font-light"; t.textContent = "Added to cart"; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }}
+                              className="flex-1 text-[10px] font-medium uppercase tracking-[0.15em] text-white border border-white/40 py-1.5 hover:bg-white/10 transition-colors flex items-center justify-center gap-1.5">
+                              <ShoppingBag className="w-3 h-3" /> Add to Cart
+                            </button>
+                            <button
+                              onClick={() => { addToCart(p.id, 1); router.push("/cart"); }}
+                              className="flex-1 text-[10px] font-medium uppercase tracking-[0.15em] text-[#1e2a5e] bg-white py-1.5 hover:bg-[#eef0f8] transition-colors">
+                              Shop Now
+                            </button>
+                          </div>
                         </div>
                       </div>
                       <div className="pt-4 pb-2">

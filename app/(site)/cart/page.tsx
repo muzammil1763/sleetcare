@@ -139,8 +139,13 @@ export default function Cart() {
                   Checkout <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </Link>
-              <Link href="/shop">
+              <Link href="/guest-checkout">
                 <button className="w-full mt-3 h-10 border border-[#dde2f0] text-[11px] font-medium uppercase tracking-[0.15em] text-[#5a6380] hover:border-[#1e2a5e] hover:text-[#1e2a5e] transition-colors">
+                  Continue as Guest
+                </button>
+              </Link>
+              <Link href="/shop">
+                <button className="w-full mt-3 h-10 text-[11px] font-light text-[#8fa0d8] hover:text-[#5a6380] transition-colors">
                   Continue Shopping
                 </button>
               </Link>

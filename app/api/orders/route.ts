@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { sendOrderConfirmationEmail } from "@/lib/mailer";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,7 @@ const orderSchema = z.object({
   email: z.string().email(),
   phone: z.string().optional(),
   paymentMethod: z.string().optional(),
-  paymentScreenshot: z.string().optional(),
+  paymentScreenshot: z.string().nullable().optional(),
   deliveryCharges: z.number().optional(),
   items: z.array(z.object({ productId: z.string(), qty: z.number().int().positive() })),
   shippingAddress: z.object({
@@ -101,6 +102,21 @@ export async function POST(req: NextRequest) {
         })
       )
     );
+
+    // Send confirmation email (non-blocking)
+    sendOrderConfirmationEmail({
+      orderId: order.id,
+      customerName: customer,
+      customerEmail: email,
+      status: "Pending",
+      items: order.orderItems.map(i => ({ name: i.product.name, qty: i.qty, price: i.price })),
+      subtotal,
+      deliveryCharges: shipping,
+      total,
+      paymentMethod: paymentMethod || "cod",
+      shippingAddress: shippingAddress as any,
+      isGuest: !user?.id,
+    }).catch(err => console.error("Confirmation email failed:", err));
 
     return NextResponse.json(order, { status: 201 });
   } catch (e: any) {
