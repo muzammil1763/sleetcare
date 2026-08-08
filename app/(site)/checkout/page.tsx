@@ -48,7 +48,7 @@ export default function Checkout() {
   };
 
   useEffect(() => {
-    if (status === "unauthenticated") router.push("/cart");
+    if (status === "unauthenticated") router.push("/login?callbackUrl=/checkout");
   }, [status, router]);
 
   useEffect(() => {
