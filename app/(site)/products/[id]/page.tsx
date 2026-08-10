@@ -67,7 +67,7 @@ export default function ProductDetail() {
 
   const submitReview = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!reviewForm.name || !reviewForm.email || !reviewForm.body) {
+    if (!reviewForm.name || !reviewForm.body) {
       toast({ title: "Please fill all required fields", variant: "destructive" });
       return;
     }
@@ -76,7 +76,14 @@ export default function ProductDetail() {
       const res = await fetch("/api/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...reviewForm, productId: id }),
+        body: JSON.stringify({
+          name: reviewForm.name,
+          email: reviewForm.email || `guest_${Date.now()}@sleetcare.com`,
+          rating: reviewForm.rating,
+          title: "",
+          body: reviewForm.body,
+          productId: id,
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to submit");
@@ -395,27 +402,15 @@ export default function ProductDetail() {
                   </div>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] block mb-1.5">Name *</label>
-                    <input required value={reviewForm.name} onChange={e => setReviewForm(f => ({ ...f, name: e.target.value }))}
-                      placeholder="Your name"
-                      className="w-full border border-[#dde2f0] px-3 py-2.5 text-sm font-light text-[#1e2a5e] focus:outline-none focus:border-[#1e2a5e] bg-white" />
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] block mb-1.5">Email *</label>
-                    <input required type="email" value={reviewForm.email} onChange={e => setReviewForm(f => ({ ...f, email: e.target.value }))}
-                      placeholder="your@email.com"
-                      className="w-full border border-[#dde2f0] px-3 py-2.5 text-sm font-light text-[#1e2a5e] focus:outline-none focus:border-[#1e2a5e] bg-white" />
-                  </div>
-                </div>
-
                 <div>
-                  <label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] block mb-1.5">Review Title</label>
-                  <input value={reviewForm.title} onChange={e => setReviewForm(f => ({ ...f, title: e.target.value }))}
-                    placeholder="Summarise your experience"
+                  <label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] block mb-1.5">Name *</label>
+                  <input required value={reviewForm.name} onChange={e => setReviewForm(f => ({ ...f, name: e.target.value }))}
+                    placeholder="Your name"
                     className="w-full border border-[#dde2f0] px-3 py-2.5 text-sm font-light text-[#1e2a5e] focus:outline-none focus:border-[#1e2a5e] bg-white" />
                 </div>
+
+                {/* Hidden email for spam protection — auto-filled from session or left blank */}
+                <input type="hidden" value={reviewForm.email} />
 
                 <div>
                   <label className="text-[10px] font-medium uppercase tracking-[0.15em] text-[#5a6380] block mb-1.5">Review *</label>
@@ -424,7 +419,7 @@ export default function ProductDetail() {
                     className="w-full border border-[#dde2f0] px-3 py-2.5 text-sm font-light text-[#1e2a5e] focus:outline-none focus:border-[#1e2a5e] bg-white resize-none" />
                 </div>
 
-                <p className="text-[10px] font-light text-[#8fa0d8]">Your email will not be displayed publicly.</p>
+                <p className="text-[10px] font-light text-[#8fa0d8]">Only your name will be shown publicly.</p>
 
                 <button type="submit" disabled={submitting}
                   className="w-full h-11 bg-[#1e2a5e] text-white text-[11px] font-medium uppercase tracking-[0.2em] hover:bg-[#2d3a8c] disabled:opacity-60 transition-colors flex items-center justify-center gap-2">
