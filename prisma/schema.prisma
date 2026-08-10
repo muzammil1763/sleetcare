@@ -164,6 +164,18 @@ model Vlog {
   updatedAt   DateTime @updatedAt
 }
 
+model Review {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId   String   @db.ObjectId
+  name        String
+  email       String
+  rating      Int      // 1-5
+  title       String   @default("")
+  body        String
+  approved    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
 type Spec {
   label String
   value String

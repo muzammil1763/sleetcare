@@ -9,6 +9,62 @@ import { useRouter } from "next/navigation";
 
 type CategoryWithImage = { id: string; name: string; description: string; image: string | null; };
 
+type HomeReview = { id: string; name: string; rating: number; title: string; body: string; createdAt: string; };
+
+function ReviewsSection() {
+  const [reviews, setReviews] = useState<HomeReview[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/reviews?recent=true")
+      .then(r => r.json())
+      .then(d => setReviews(Array.isArray(d) ? d : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (!loading && reviews.length === 0) return null;
+
+  return (
+    <section className="py-20 bg-[#eef0f8]">
+      <div className="container">
+        <div className="text-center mb-12">
+          <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#2d3a8c] mb-4">Real Skin, Real Results</p>
+          <h2 className="font-display text-3xl md:text-4xl text-[#1e2a5e]">What our customers say</h2>
+        </div>
+
+        {loading ? (
+          <div className="flex justify-center py-10">
+            <div className="w-6 h-6 border-2 border-[#dde2f0] border-t-[#1e2a5e] rounded-full animate-spin" />
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-5">
+            {reviews.slice(0, 6).map(r => (
+              <div key={r.id} className="bg-white border border-[#dde2f0] p-7 hover:shadow-sm transition-shadow">
+                <div className="flex gap-0.5 mb-4">
+                  {[1,2,3,4,5].map(s => (
+                    <Star key={s} className={`w-4 h-4 ${s <= r.rating ? "fill-amber-400 text-amber-400" : "text-[#dde2f0]"}`} />
+                  ))}
+                </div>
+                {r.title && <p className="text-sm font-medium text-[#1e2a5e] mb-2">{r.title}</p>}
+                <p className="text-sm font-light text-[#5a6380] leading-relaxed mb-6 line-clamp-4">
+                  &quot;{r.body}&quot;
+                </p>
+                <div className="border-t border-[#dde2f0] pt-4">
+                  <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#1e2a5e]">{r.name}</p>
+                  <p className="text-[10px] font-light text-[#8fa0d8] mt-0.5">
+                    {new Date(r.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const { products: storeProducts, loadProducts, addToCart } = useAppStore();
   const router = useRouter();
@@ -394,35 +450,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 10. TESTIMONIALS ── */}
-      <section className="py-20 bg-[#eef0f8]">
-        <div className="container">
-          <div className="text-center mb-14">
-            <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-[#2d3a8c] mb-4">Real Skin, Real Results</p>
-            <h2 className="font-display text-3xl md:text-4xl text-[#1e2a5e]">What our community says</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { quote: "Six weeks with the Glow Serum and my texture is completely different. The first routine I've actually finished a bottle of.", author: "Amara O.", tag: "Verified Buyer", stars: 5 },
-              { quote: "I have reactive skin and nothing has ever felt this calm. The toner and moisturizer together are unbeatable.", author: "Hannah L.", tag: "Verified Buyer", stars: 5 },
-              { quote: "Beautiful packaging, honest ingredient lists, arrived with zero plastic. The kind of brand I've been looking for.", author: "Priya S.", tag: "Verified Buyer", stars: 5 },
-            ].map(t => (
-              <div key={t.author} className="bg-white border border-[#dde2f0] p-8 hover:shadow-md transition-shadow">
-                <div className="flex gap-0.5 mb-5">
-                  {Array.from({ length: t.stars }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-[#2d3a8c] fill-[#2d3a8c]" />
-                  ))}
-                </div>
-                <p className="text-sm font-light text-[#5a6380] leading-relaxed mb-6 italic">"{t.quote}"</p>
-                <div className="border-t border-[#dde2f0] pt-5">
-                  <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#1e2a5e]">{t.author}</p>
-                  <p className="text-[10px] font-light text-[#8fa0d8] mt-0.5">{t.tag}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── 10. REVIEWS FROM DB ── */}
+      <ReviewsSection />
 
       {/* ── 11. FEATURES IMAGE ── */}
       <section className="w-full">
