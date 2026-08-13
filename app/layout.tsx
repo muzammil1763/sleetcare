@@ -11,7 +11,8 @@ import LoadingProvider from "@/components/providers/loading-provider";
 import TopProgressBar from "@/components/ui/top-progress-bar";
 import { generateSEO } from "@/lib/seo";
 import { OrganizationSchema, WebsiteSchema } from "@/components/seo/structured-data";
-import Script from "next/script";
+import FacebookPixel from "@/components/analytics/FacebookPixel";
+import { Suspense } from "react";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -57,22 +58,12 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/logo.png" />
         <OrganizationSchema />
         <WebsiteSchema />
-        {/* Meta Pixel */}
-        <Script id="meta-pixel" strategy="afterInteractive">{`
-          !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-          n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-          n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
-          (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init','1626447845566585');
-          fbq('track','PageView');
-        `}</Script>
-        <noscript>
-          <img height="1" width="1" style={{ display: "none" }}
-            src="https://www.facebook.com/tr?id=1626447845566585&ev=PageView&noscript=1" alt="" />
-        </noscript>
+        {/* Meta Pixel — loads once, tracks route changes via FacebookPixel component */}
       </head>
       <body>
+        <Suspense>
+          <FacebookPixel />
+        </Suspense>
         <SessionProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
             <AppStoreProvider>
