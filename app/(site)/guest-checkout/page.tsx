@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Banknote, CreditCard, CheckCircle2, Upload, X } from "lucide-react";
 import Link from "next/link";
+import { trackInitiateCheckout } from "@/lib/meta-pixel";
 
 type PaymentMethod = "cod" | "bank";
 
@@ -60,6 +61,19 @@ export default function GuestCheckout() {
 
   const subtotal = cart.reduce((s, i) => s + (products.find(p => p.id === i.productId)?.price ?? 0) * i.qty, 0);
   const total = subtotal + deliveryCharges;
+
+  // Fire InitiateCheckout once when cart + prices are ready
+  const checkoutFiredRef = useRef(false);
+  useEffect(() => {
+    if (cart.length === 0 || subtotal === 0) return;
+    if (checkoutFiredRef.current) return;
+    checkoutFiredRef.current = true;
+    trackInitiateCheckout({
+      contentIds: cart.map(i => i.productId),
+      value: subtotal + deliveryCharges,
+      numItems: cart.reduce((n, i) => n + i.qty, 0),
+    });
+  }, [cart, subtotal, deliveryCharges]);
 
   const handleScreenshotUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

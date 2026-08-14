@@ -5,7 +5,6 @@ import { useAppStore } from "@/store/AppStore";
 import { Package, Minus, Plus, Trash2, ArrowRight, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { trackInitiateCheckout } from "@/lib/meta-pixel";
 
 const LOCAL_IMGS = ["/img1.png", "/img2.png", "/img3.png"];
 
@@ -147,11 +146,6 @@ export default function Cart() {
 
               <Link href="/guest-checkout">
                 <button
-                  onClick={() => trackInitiateCheckout({
-                    contentIds: items.map(i => i.product.id),
-                    value: total,
-                    numItems: items.reduce((n, i) => n + i.qty, 0),
-                  })}
                   className="w-full h-12 bg-[#1e2a5e] text-white text-[11px] font-medium uppercase tracking-[0.2em] hover:bg-[#2d3a8c] transition-colors flex items-center justify-center gap-2">
                   Checkout <ArrowRight className="w-3.5 h-3.5" />
                 </button>

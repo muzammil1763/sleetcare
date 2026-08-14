@@ -46,6 +46,8 @@ export default function ProductDetail() {
 
   useEffect(() => { loadProducts(); }, [loadProducts]);
 
+  const product = products.find((p) => p.id === id);
+
   // Fire ViewContent once when product is identified
   const viewFiredRef = useRef(false);
   useEffect(() => {
@@ -107,7 +109,6 @@ export default function ProductDetail() {
     }
   };
 
-  const product = products.find((p) => p.id === id);
 
   if (products.length === 0) {
     return (
