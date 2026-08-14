@@ -1,8 +1,9 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { trackViewContent as _trackViewContent } from "@/lib/meta-pixel";
 
 const PIXEL_ID = "1626447845566585";
 
@@ -10,15 +11,22 @@ declare global {
   interface Window {
     fbq: (...args: unknown[]) => void;
     _fbq: unknown;
+    _fbqLoaded: boolean;
   }
 }
 
 export default function FacebookPixel() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isInitialMount = useRef(true);
 
-  // Track page views on route change (not on initial load — the pixel script handles that)
   useEffect(() => {
+    // Skip first render — the inline script already fires PageView on init
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    // Fire PageView only on subsequent client-side navigations
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "PageView");
     }

@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { CheckCircle2, Package, Upload, X, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "@/hooks/use-toast";
+import { trackPurchase } from "@/lib/meta-pixel";
 
 type OrderItem = {
   id: string;
@@ -50,7 +51,17 @@ export default function OrderConfirmation() {
   useEffect(() => {
     fetch(`/api/orders/${id}`)
       .then((r) => r.json())
-      .then((data) => { if (data.id) setOrder(data); })
+      .then((data) => {
+        if (data.id) {
+          setOrder(data);
+          // Fire Purchase once — trackPurchase has sessionStorage dedup guard
+          trackPurchase({
+            id: data.id,
+            total: data.total,
+            itemIds: (data.orderItems || []).map((i: { product: { id: string } }) => i.product.id),
+          });
+        }
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [id]);

@@ -8,6 +8,7 @@ import { ArrowLeft, Package, Plus, Minus, Loader2, Heart, Play, Star } from "luc
 import { useState, useEffect, useRef } from "react";
 import { toast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
+import { trackViewContent, trackAddToCart } from "@/lib/meta-pixel";
 
 function toEmbedUrl(url: string): string {
   if (!url) return "";
@@ -44,6 +45,15 @@ export default function ProductDetail() {
   const reviewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { loadProducts(); }, [loadProducts]);
+
+  // Fire ViewContent once when product is identified
+  const viewFiredRef = useRef(false);
+  useEffect(() => {
+    if (product && !viewFiredRef.current) {
+      viewFiredRef.current = true;
+      trackViewContent({ id: product.id, name: product.name, price: product.price });
+    }
+  }, [product]);
 
   useEffect(() => {
     if (session?.user) {
@@ -283,7 +293,12 @@ export default function ProductDetail() {
                   </button>
                 </div>
                 <button
-                  onClick={() => { addToCart(product.id, qty); toast({ title: "Added to cart", description: `${qty} x ${product.name}` }); setQty(1); }}
+                  onClick={() => {
+                    addToCart(product.id, qty);
+                    trackAddToCart({ id: product.id, name: product.name, price: product.price }, qty);
+                    toast({ title: "Added to cart", description: `${qty} x ${product.name}` });
+                    setQty(1);
+                  }}
                   disabled={product.stock <= 0}
                   className="flex-1 h-12 border border-[#1e2a5e] text-[#1e2a5e] text-[11px] font-medium uppercase tracking-[0.2em] hover:bg-[#eef0f8] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                   {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
@@ -293,7 +308,7 @@ export default function ProductDetail() {
                 </button>
               </div>
               <button
-                onClick={() => { addToCart(product.id, qty); router.push("/cart"); }}
+                onClick={() => { addToCart(product.id, qty); trackAddToCart({ id: product.id, name: product.name, price: product.price }, qty); router.push("/cart"); }}
                 disabled={product.stock <= 0}
                 className="w-full h-12 bg-[#1e2a5e] text-white text-[11px] font-medium uppercase tracking-[0.2em] hover:bg-[#2d3a8c] disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                 Shop Now
