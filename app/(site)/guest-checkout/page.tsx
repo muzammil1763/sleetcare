@@ -136,7 +136,7 @@ export default function GuestCheckout() {
       if (!res.ok) throw new Error(data.error || "Failed to place order");
       clearCart();
       toast({ title: "Order placed!", description: "Check your email for confirmation." });
-      router.push(`/order/${data.id}`);
+      router.push(`/thank-you/${data.id}`);
     } catch (err: any) {
       toast({ title: "Order failed", description: err.message, variant: "destructive" });
     } finally {

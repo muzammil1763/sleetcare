@@ -152,7 +152,7 @@ export default function Checkout() {
       if (!res.ok) throw new Error(data.error || "Failed to place order");
       clearCart();
       toast({ title: "Order placed!", description: paymentMethod === "cod" ? "Pay on delivery. Thank you!" : "We'll confirm once payment is received." });
-      router.push(`/order/${data.id}`);
+      router.push(`/thank-you/${data.id}`);
     } catch (err: any) {
       toast({ title: "Order failed", description: err.message, variant: "destructive" });
     } finally {
