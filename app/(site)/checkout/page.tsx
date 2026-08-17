@@ -16,6 +16,7 @@ export default function Checkout() {
   const { cart, products, clearCart } = useAppStore();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [deliveryCharges, setDeliveryCharges] = useState(250);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [screenshot, setScreenshot] = useState<string>("");
@@ -73,7 +74,7 @@ export default function Checkout() {
 
   if (!session) return null;
 
-  if (cart.length === 0) {
+  if (cart.length === 0 && !submitted) {
     if (typeof window !== "undefined") router.push("/cart");
     return null;
   }
@@ -150,6 +151,7 @@ export default function Checkout() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to place order");
+      setSubmitted(true);
       clearCart();
       toast({ title: "Order placed!", description: paymentMethod === "cod" ? "Pay on delivery. Thank you!" : "We'll confirm once payment is received." });
       router.push(`/thank-you/${data.id}`);

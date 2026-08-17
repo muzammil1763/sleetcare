@@ -16,6 +16,7 @@ export default function GuestCheckout() {
   const { cart, products, clearCart } = useAppStore();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [deliveryCharges, setDeliveryCharges] = useState(250);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [screenshot, setScreenshot] = useState("");
@@ -56,8 +57,8 @@ export default function GuestCheckout() {
   }, []);
 
   useEffect(() => {
-    if (cart.length === 0 && typeof window !== "undefined") router.push("/cart");
-  }, [cart, router]);
+    if (!submitted && cart.length === 0 && typeof window !== "undefined") router.push("/cart");
+  }, [cart, router, submitted]);
 
   const subtotal = cart.reduce((s, i) => s + (products.find(p => p.id === i.productId)?.price ?? 0) * i.qty, 0);
   const total = subtotal + deliveryCharges;
@@ -134,6 +135,7 @@ export default function GuestCheckout() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to place order");
+      setSubmitted(true);
       clearCart();
       toast({ title: "Order placed!", description: "Check your email for confirmation." });
       router.push(`/thank-you/${data.id}`);
@@ -153,7 +155,7 @@ export default function GuestCheckout() {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, [key]: e.target.value }),
   });
 
-  if (cart.length === 0) return null;
+  if (cart.length === 0 && !submitted) return null;
 
   return (
     <div className="bg-[#f7f8fc] min-h-screen">
